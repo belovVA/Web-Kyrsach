@@ -40,11 +40,20 @@ main {
 }
 
 .controls {
+  margin-top: 10px; /* Промежуток между группами кнопок */
+  text-align: right; /* Выравнивание кнопок по правому краю */
+}
+
+.controls button {
+  margin-left: 10px; /* Промежуток между кнопками */
+}
+
+/* .controls {
     display: flex;
     justify-content: space-between;
     
     margin-bottom: 20px;
-}
+} */
 
 button {
     padding: 10px 20px;

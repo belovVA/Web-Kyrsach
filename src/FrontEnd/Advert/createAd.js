@@ -9,6 +9,10 @@ $(document).ready(function() {
   // Загрузка профиля пользователя для автозаполнения
   loadUserProfile(userId);
 
+  $('#backButton').click(function() {
+    window.location.href = '../main/main.html?userId=' + userId;
+});
+
   // Отправка формы объявления
   $('#adForm').submit(function(event) {
       event.preventDefault();
