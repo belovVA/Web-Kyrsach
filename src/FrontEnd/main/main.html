@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бюро находок</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <h1>Бюро находок</h1>
+    </header>
+    <div class="container">
+        <aside>
+            <nav id="userNav">
+                <!-- Эти ссылки будут заменены на профиль пользователя после входа -->
+                <a id="profileLink" href="../profile/profile.html" style="display:none;">Профиль</a>
+                <a id="myAdsLink" href="../myads/myads.html" style="display:none;">Мои объявления</a>
+                <a id="settingsLink" href="../settings/settings.html" style="display:none;">Настройки</a>
+                <a id="logoutLink" href="#" style="display:none;">Выход</a>
+                <a id="loginRegisterLink" href="../LoginOrRegistration/logreg.html">Вход и Регистрация</a>
+                
+            </nav>
+        </aside>
+        <main>
+            <div class="controls">
+                <button id="sortButton">Отсортировать по датам</button>
+                <button id="resetButton">Сброс</button>
+            </div>
+            <div id="adContainer"></div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

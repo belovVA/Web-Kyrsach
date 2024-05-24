@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация и Вход</title>
+    <link rel="stylesheet" href="logReg.css">
+</head>
+<body>
+    <button id="return-button" onclick="goToMain()">Вернуться на главную</button>
+    <div class="container">
+        <div class="tabs">
+            <button id="login-tab" class="tab-button active" data-tab="login">Вход</button>
+            <button class="tab-button" data-tab="register">Регистрация</button>
+        </div>
+        <div class="tab-content" id="login">
+            <h2>Вход</h2>
+            <form id="login-form">
+                <label for="login-phone">Номер телефона</label>
+                <input type="text" id="login-phone" name="phone" required>
+                
+                <label for="login-password">Пароль</label>
+                <input type="password" id="login-password" name="password" required>
+                <input type="checkbox" id="show-login-password"> Показать пароль
+                
+                <button type="submit">Войти</button>
+            </form>
+        </div>
+        <div class="tab-content" id="register" style="display:none;">
+            <h2>Регистрация</h2>
+            <form id="register-form">
+                <label for="register-last-name">Фамилия</label>
+                <input type="text" id="register-last-name" name="last-name" required>
+                
+                <label for="register-first-name">Имя</label>
+                <input type="text" id="register-first-name" name="first-name" required>
+                
+                <label for="register-middle-name">Отчество</label>
+                <input type="text" id="register-middle-name" name="middle-name">
+                
+                <label for="register-phone">Номер телефона</label>
+                <input type="text" id="register-phone" name="phone" required>
+                
+                <label for="register-birthday">Дата рождения</label>
+                <input type="date" id="register-birthday" name="birthday" required>
+
+                <label for="register-password">Пароль</label>
+                <input type="password" id="register-password" name="password" required>
+                <input type="checkbox" id="show-register-password"> Показать пароль
+                
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="logreg.js"></script>
+</body>
+</html>
+  
