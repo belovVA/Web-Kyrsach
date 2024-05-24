@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание объявления</title>
+    <link rel="stylesheet" href="createAd.css">
+</head>
+<body>
+    <header>
+        <h1>Создание объявления</h1>
+    </header>
+    <div class="container">
+        <form id="adForm">
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title" name="title" required>
+            <label for="photo">Прикрепить фото:</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+            <label for="date">Дата находки:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="location">Место и время находки:</label>
+            <input type="text" id="location" name="location" required>
+            <label for="contactName">Имя нашедшего:</label>
+            <input type="text" id="contactName" name="contactName" readonly>
+            <label for="contactPhone">Номер телефона нашедшего:</label>
+            <input type="text" id="contactPhone" name="contactPhone" readonly>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="createAd.js"></script>
+</body>
+</html>

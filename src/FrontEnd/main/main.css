@@ -26,14 +26,14 @@ aside {
 
 aside nav a {
     display: block;
-    color: #007bff;
+    color: rgb(187, 198, 223);
     text-decoration: none;
     margin: 10px 0;
 }
 
 main {
     flex: 1;
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -67,6 +67,16 @@ button:hover {
     margin-bottom: 10px;
 }
 
+
+#adContainer .ad {
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
 #adContainer .ad p {
-    margin: 5px 0;
+  margin: 5px 0;
 }

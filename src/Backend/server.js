@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 const path = require('path');
 const app = express();
 const PORT = 3000;
@@ -19,10 +20,55 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
+const announcementSchema = new mongoose.Schema({
+  title: String,
+  photo: String,
+  description: String,
+  date: Date,
+  location: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  status: { type: Boolean, default: false }
+});
+
 const User = mongoose.model('User', userSchema);
+const Announcement = mongoose.model('Announcement', announcementSchema);
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../FrontEnd')));
+
+// Настройка хранения файлов с использованием multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname)); // Используем текущую дату для имени файла
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/createAd', upload.single('photo'), async (req, res) => {
+    const { title, description, date, location, userId } = req.body;
+    const photo = req.file ? req.file.filename : null;
+
+    try {
+        const announcement = new Announcement({
+            title,
+            photo,
+            description,
+            date,
+            location,
+            userId
+        });
+        await announcement.save();
+        res.status(201).send('Объявление успешно добавлено!');
+    } catch (error) {
+        res.status(500).send('Ошибка при добавлении объявления');
+    }
+});
+
 
 // Регистрация
 app.post('/register', async (req, res) => {
@@ -109,6 +155,26 @@ app.put('/profile/:userId', async (req, res) => {
     }
 });
 
+app.post('/createAd', (req, res) => {
+  const adData = req.body;
+
+  // Далее можно добавить код для сохранения объявления в базу данных или другие действия
+  
+  // Пример ответа
+  res.status(201).send('Объявление успешно добавлено!');
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+});
+
+app.get('/ads', async (req, res) => {
+  const { sortByDate } = req.query;
+
+  try {
+      const ads = await Announcement.find({ status: false }).sort({ date: -1 });
+      res.json(ads);
+  } catch (error) {
+      res.status(500).send('Ошибка при получении объявлений');
+  }
 });
