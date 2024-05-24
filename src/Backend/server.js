@@ -22,8 +22,9 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../FrontEnd'))); // Обслуживание статических файлов
+app.use(express.static(path.join(__dirname, '../FrontEnd')));
 
+// Регистрация
 app.post('/register', async (req, res) => {
     const { lastName, firstName, middleName, phone, birthday, password } = req.body;
     
@@ -48,6 +49,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// Логин
 app.post('/login', async (req, res) => {
     const { phone, password } = req.body;
 
@@ -70,6 +72,40 @@ app.post('/login', async (req, res) => {
         res.json({ userId: user._id, token });
     } catch (error) {
         res.status(500).send('Error logging in');
+    }
+});
+
+// Загрузка профиля пользователя
+app.get('/profile/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).send('Error loading user profile');
+    }
+});
+
+// Редактирование профиля пользователя
+app.put('/profile/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const { lastName, firstName, middleName, phone, password } = req.body;
+    let updatedProfile = { lastName, firstName, middleName, phone };
+
+    if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        updatedProfile.password = hashedPassword;
+    }
+
+    try {
+        await User.findByIdAndUpdate(userId, updatedProfile);
+        res.status(200).send('Profile updated successfully');
+    } catch (error) {
+        res.status(500).send('Error updating user profile');
     }
 });
 

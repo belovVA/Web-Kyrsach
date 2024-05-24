@@ -7,36 +7,37 @@
     <link rel="stylesheet" href="profile.css">
 </head>
 <body>
-  <header>
-    <h1>Профиль пользователя</h1>
-</header>
-<div class="container">
-    <main>
-        <div id="profileContainer">
-            <form id="profileForm">
-                <label for="surname">Фамилия:</label>
-                <input type="text" id="surname" name="surname" required>
-                <label for="name">Имя:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="middlename">Отчество:</label>
-                <input type="text" id="middlename" name="middlename">
-                <label for="phone">Номер телефона:</label>
-                <input type="text" id="phone" name="phone" required>
-                <div id="passwordFields">
-                    <label for="newPassword">Новый пароль:</label>
-                    <input type="password" id="newPassword" name="newPassword">
-                    <label for="confirmPassword">Подтвердите пароль:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword">
-                </div>
-                <div id="editButtons">
-                    <button type="button" id="editButton">Редактировать</button>
-                    <button type="submit" id="saveButton" style="display:none;">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </main>
-</div>
+    <header>
+        <h1>Профиль пользователя</h1>
+        <button id="backButton">Назад</button>
 
+    </header>
+    <div class="container">
+        <main>
+            <div id="profileContainer">
+                <form id="profileForm">
+                    <label for="surname">Фамилия:</label>
+                    <input type="text" id="surname" name="surname" required readonly>
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" name="name" required readonly>
+                    <label for="middlename">Отчество:</label>
+                    <input type="text" id="middlename" name="middlename" readonly>
+                    <label for="phone">Номер телефона:</label>
+                    <input type="text" id="phone" name="phone" required readonly>
+                    <div id="passwordFields" style="display: none;">
+                        <label for="newPassword">Новый пароль:</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                        <label for="confirmPassword">Подтвердите пароль:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </div>
+                    <div id="editButtons">
+                        <button type="button" id="editButton">Редактировать</button>
+                        <button type="submit" id="saveButton" style="display:none;">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="profile.js"></script>
 </body>

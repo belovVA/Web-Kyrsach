@@ -1,88 +1,62 @@
 $(document).ready(function() {
-  // Получение данных профиля пользователя
-  $(document).ready(function() {
-    // Извлечение ID пользователя из локального хранилища
-    const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
 
-    // Если пользователь не вошел в систему, перенаправить на страницу входа
-    if (!userId) {
-        window.location.href = '../LoginOrRegistration/logreg.html';
-    }
+  if (!userId) {
+      window.location.href = '../LoginOrRegistration/logreg.html';
+  }
 
-    // Загрузка профиля пользователя
-    loadUserProfile(userId);
+  loadUserProfile(userId);
 
-    // Обработчик нажатия на кнопку "Редактировать"
-    $('#editButton').click(function() {
-        $('#passwordFields').show(); // Показать поля с паролем
-        $('#editButton').hide(); // Скрыть кнопку "Редактировать"
-        $('#saveButton').show(); // Показать кнопку "Сохранить"
-        $('#profileForm input').removeAttr('readonly'); // Разрешить редактирование полей
-    });
+  $('#editButton').click(function() {
+      $('#passwordFields').show();
+      $('#editButton').hide();
+      $('#saveButton').show();
+      $('#profileForm input').removeAttr('readonly');
+  });
 
-    // Обработчик отправки формы
-    $('#profileForm').submit(function(event) {
-        event.preventDefault();
-        // Ваша логика сохранения профиля
-        // После сохранения профиля скрываем поля с паролем и кнопку "Сохранить"
-        $('#passwordFields').hide();
-        $('#saveButton').hide();
-        $('#editButton').show();
-        $('#profileForm input').attr('readonly', 'readonly'); // Запретить редактирование полей
-    });
-
-    // Функция загрузки профиля пользователя
-    function loadUserProfile(userId) {
-      $.get('/profile', function(data) {
-        $('#surname').val(data.surname);
-        $('#name').val(data.name);
-        $('#middlename').val(data.middlename);
-        $('#phone').val(data.phone);
-    });
-        // Ваш код загрузки профиля пользователя по userId
-        // Например, вы можете использовать AJAX запрос для загрузки данных с сервера и заполнить поля формы
-    }
-});
-
-
-  // Сохранение изменений профиля пользователя
   $('#profileForm').submit(function(event) {
-    event.preventDefault();
-    const surname = $('#surname').val();
-    const name = $('#name').val();
-    const middlename = $('#middlename').val();
-    const phone = $('#phone').val();
-    const newPassword = $('#newPassword').val();
-    const confirmPassword = $('#confirmPassword').val();
+      event.preventDefault();
 
-    if (newPassword !== confirmPassword) {
-        alert('Пароли не совпадают!');
-        return;
-    }
+      if ($('#newPassword').val() !== $('#confirmPassword').val()) {
+          alert('Пароли не совпадают!');
+          return;
+      }
 
-    const profileData = {
-        surname: surname,
-        name: name,
-        middlename: middlename,
-        phone: phone,
-        newPassword: newPassword
-    };
+      const updatedProfile = {
+          lastName: $('#surname').val(),
+          firstName: $('#name').val(),
+          middleName: $('#middlename').val(),
+          phone: $('#phone').val(),
+          password: $('#newPassword').val() ? $('#newPassword').val() : undefined // Если пароль не указан, то это поле будет undefined
+      };
 
-    $.ajax({
-        url: '/profile',
-        type: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(profileData),
-        success: function(response) {
-            alert('Профиль успешно обновлен');
-            loadProfile();
-        },
-        error: function(error) {
-            alert('Ошибка при обновлении профиля');
-        }
-    });
+      $.ajax({
+          url: '/profile/' + userId,
+          method: 'PUT',
+          data: JSON.stringify(updatedProfile),
+          contentType: 'application/json',
+          success: function(response) {
+              alert('Профиль успешно обновлен!');
+              $('#passwordFields').hide();
+              $('#saveButton').hide();
+              $('#editButton').show();
+              $('#profileForm input').attr('readonly', 'readonly');
+          },
+          error: function(error) {
+              alert('Ошибка при обновлении профиля!');
+          }
+      });
+  });
+
+  $('#backButton').click(function() {
+    window.location.href = '../main/main.html?userId=' + userId;
 });
-
-  // // Загрузка профиля при открытии страницы
-  // loadProfile();
+  function loadUserProfile(userId) {
+      $.get('/profile/' + userId, function(user) {
+          $('#surname').val(user.lastName);
+          $('#name').val(user.firstName);
+          $('#middlename').val(user.middleName);
+          $('#phone').val(user.phone);
+      });
+  }
 });
