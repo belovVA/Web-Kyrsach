@@ -18,6 +18,7 @@ $(document).ready(function() {
   function getAdHTML(ad) {
       const adContainer = document.createElement('div');
       adContainer.classList.add('ad');
+      adContainer.setAttribute('data-id', ad._id); // Устанавливаем data-id атрибут
 
       const title = document.createElement('h2');
       title.textContent = ad.title;
@@ -46,12 +47,19 @@ $(document).ready(function() {
       adContainer.appendChild(date);
       adContainer.appendChild(location);
       adContainer.appendChild(status);
+      console.log(ad._id); // Получаем ID из data-id атрибута
+
+      adContainer.addEventListener('click', () => {
+          const adId = adContainer.getAttribute('data-id');
+          console.log(adId); // Получаем ID из data-id атрибута
+          window.location.href = `../AdDetail/adDetail.html?adId=${adId}`; // Перенаправление на страницу с деталями объявления с передачей ID
+      });
 
       return adContainer;
   }
 
   // Функция для загрузки объявлений с сервера
-  function loadAds(sortByDate = false, filterStatus = null, daysRange = 31) {
+  function loadAds(sortByDate = false, filterStatus = null, daysRange = 365) {
       const container = document.getElementById('adContainer');
       container.innerHTML = ''; // Очищаем контейнер перед добавлением новых объявлений
       console.log("Попытка загрузить объявления");
@@ -80,10 +88,6 @@ $(document).ready(function() {
   }
 
   // Обработчики кнопок фильтрации и сортировки
-  $('#sortButton').click(function() {
-      loadAds(true);
-  });
-
   $('#resetButton').click(function() {
       loadAds();
   });

@@ -3,8 +3,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = 3000;
+const JWT_SECRET = 'your_jwt_secret';
 
 mongoose.connect('mongodb://localhost:27017/lostAndFound', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -82,59 +86,75 @@ app.post('/createAd', async (req, res) => {
 });
 
 
+// Маршрут для получения деталей объявления
+app.get('/adDetail', async (req, res) => {
+  const adId = req.query.id;
+  console.log("ID:", adId);
+  try {
+      const ad = await Announcement.findById(adId); // Используем модель Announcement
+      if (!ad) {
+          return res.status(404).send('Объявление не найдено');
+      }
+      res.json(ad);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Ошибка при получении объявления');
+  }
+});
+
+
 
 
 // Регистрация
 app.post('/register', async (req, res) => {
-    const { lastName, firstName, middleName, phone, birthday, password } = req.body;
-    
-    if (!lastName || !firstName || !phone || !birthday || !password) {
-        return res.status(400).send('All fields are required');
-    }
+  const { lastName, firstName, middleName, phone, birthday, password } = req.body;
+  
+  if (!lastName || !firstName || !phone || !birthday || !password) {
+      return res.status(400).send('All fields are required');
+  }
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({
-            lastName,
-            firstName,
-            middleName,
-            phone,
-            birthday,
-            password: hashedPassword
-        });
-        await user.save();
-        res.status(201).send('User registered successfully');
-    } catch (error) {
-        res.status(500).send('Error registering user');
-    }
+  try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({
+          lastName,
+          firstName,
+          middleName,
+          phone,
+          birthday,
+          password: hashedPassword
+      });
+      await user.save();
+      res.status(201).send('User registered successfully');
+  } catch (error) {
+      res.status(500).send('Error registering user');
+  }
 });
 
 // Логин
 app.post('/login', async (req, res) => {
-    const { phone, password } = req.body;
+  const { phone, password } = req.body;
 
-    if (!phone || !password) {
-        return res.status(400).send('All fields are required');
-    }
+  if (!phone || !password) {
+      return res.status(400).send('All fields are required');
+  }
 
-    try {
-        const user = await User.findOne({ phone });
-        if (!user) {
-            return res.status(400).send('Invalid credentials');
-        }
+  try {
+      const user = await User.findOne({ phone });
+      if (!user) {
+          return res.status(400).send('Invalid credentials');
+      }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).send('Invalid credentials');
-        }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          return res.status(400).send('Invalid credentials');
+      }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-        res.json({ userId: user._id, token });
-    } catch (error) {
-        res.status(500).send('Error logging in');
-    }
+      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+      res.json({ userId: user._id, token });
+  } catch (error) {
+      res.status(500).send('Error logging in');
+  }
 });
-
 // Загрузка профиля пользователя
 app.get('/profile/:userId', async (req, res) => {
     const userId = req.params.userId;
@@ -174,7 +194,7 @@ app.put('/profile/:userId', async (req, res) => {
 app.get('/ads', async (req, res) => {
   const { sortByDate, filterStatus, daysRange } = req.query;
   const dateLimit = new Date();
-  dateLimit.setDate(dateLimit.getDate() - (daysRange || 31));
+  dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
 
   let filter = { date: { $gte: dateLimit } };
 

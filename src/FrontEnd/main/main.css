@@ -90,3 +90,28 @@ button:hover {
 #adContainer .ad p {
   margin: 5px 0;
 }
+
+.ad-detail {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ad-detail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.ad-detail h2 {
+  margin-top: 0;
+}
+
+.ad-detail p {
+  margin: 5px 0;
+}
