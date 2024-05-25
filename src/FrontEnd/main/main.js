@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('userId');
 
@@ -7,58 +6,113 @@ $(document).ready(function() {
   if (userId) {
       console.log('Пользователь с ID ' + userId + ' вошел в систему.');
       $('#profileLink').show();
-        $('#myAdsLink').show();
-        $('#settingsLink').show();
-        $('#logoutLink').show();
-        // Скрыть ссылки на "Вход" и "Регистрацию"
-        $('#loginRegisterLink').hide();
-      // Здесь вы можете выполнить дополнительные действия, связанные с входом пользователя
+      $('#myAdsLink').show();
+      $('#settingsLink').show();
+      $('#logoutLink').show();
+      $('#loginRegisterLink').hide();
   } else {
       console.log('Пользователь не вошел в систему.');
   }
+
   // Функция для получения HTML кода объявления
   function getAdHTML(ad) {
-    let adHTML = `<p><strong>Название:</strong> ${ad.title}</p>
-                  <p><strong>Описание:</strong> ${ad.description}</p>
-                  <p><strong>Дата:</strong> ${new Date(ad.date).toLocaleDateString()}</p>`;
-    return `<div class="ad">${adHTML}</div>`;
-}
+      const adContainer = document.createElement('div');
+      adContainer.classList.add('ad');
 
-function loadAds(sortByDate = false) {
-    $.get('/ads', { sortByDate: sortByDate }, function(data) {
-        $('#adContainer').empty();
-        data.forEach(function(ad) {
-            $('#adContainer').append(getAdHTML(ad));
-        });
-    });
-}
+      const title = document.createElement('h2');
+      title.textContent = ad.title;
 
-  // Функция для загрузки объявлений с сервера
-  function loadAds(sortByDate = false) {
-      $.get('/ads', { sortByDate: sortByDate }, function(data) {
-          $('#adContainer').empty();
-          data.forEach(function(ad) {
-              $('#adContainer').append(getAdHTML(ad));
-          });
-      });
+      const description = document.createElement('p');
+      description.textContent = ad.description;
+
+      const date = document.createElement('p');
+      date.textContent = `Дата: ${new Date(ad.date).toLocaleDateString()}`;
+
+      const location = document.createElement('p');
+      location.textContent = `Местоположение: ${ad.location}`;
+
+      const status = document.createElement('p');
+      status.textContent = `Статус: ${ad.status ? 'Найден' : 'Не найден'}`;
+
+      if (ad.photoUrl) {
+          const image = document.createElement('img');
+          image.src = ad.photoUrl;
+          image.alt = ad.title;
+          adContainer.appendChild(image);
+      }
+
+      adContainer.appendChild(title);
+      adContainer.appendChild(description);
+      adContainer.appendChild(date);
+      adContainer.appendChild(location);
+      adContainer.appendChild(status);
+
+      return adContainer;
   }
 
-  // Обработчик кнопки сортировки
+  // Функция для загрузки объявлений с сервера
+  function loadAds(sortByDate = false, filterStatus = null, daysRange = 31) {
+      const container = document.getElementById('adContainer');
+      container.innerHTML = ''; // Очищаем контейнер перед добавлением новых объявлений
+      console.log("Попытка загрузить объявления");
+
+      fetch(`/ads?sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Ошибка при загрузке данных');
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log('Fetched ads:', data); // Вывод данных в консоль
+              container.innerHTML = ''; // Очищаем контейнер перед добавлением новых объявлений
+              data.forEach(ad => {
+                  container.appendChild(getAdHTML(ad));
+              });
+          })
+          .catch(error => {
+              console.error('Ошибка:', error);
+              container.innerHTML = ''; // Очищаем контейнер перед добавлением сообщения об ошибке
+              const textMessage = document.createElement('p');
+              textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
+              container.appendChild(textMessage);
+          });
+  }
+
+  // Обработчики кнопок фильтрации и сортировки
   $('#sortButton').click(function() {
       loadAds(true);
   });
 
-  // Обработчик кнопки сброса
   $('#resetButton').click(function() {
       loadAds();
   });
 
+  $('#allAdsButton').click(function() {
+      loadAds(false, null);
+  });
+
+  $('#ownerNotFoundButton').click(function() {
+      loadAds(false, false);
+  });
+
+  $('#ownerFoundButton').click(function() {
+      loadAds(false, true);
+  });
+
+  $('#last7DaysButton').click(function() {
+      loadAds(false, null, 7);
+  });
+
+  $('#lastMonthButton').click(function() {
+      loadAds(false, null, 31);
+  });
+
   $('#logoutLink').click(function(event) {
-    event.preventDefault();
-    // Очистка локального хранилища и перенаправление на страницу входа
-    localStorage.removeItem('userId');
-    window.location.href = '../LoginOrRegistration/logreg.html';
-});
+      event.preventDefault();
+      localStorage.removeItem('userId');
+      window.location.href = '../LoginOrRegistration/logreg.html';
+  });
 
   // Изначальная загрузка объявлений
   loadAds();

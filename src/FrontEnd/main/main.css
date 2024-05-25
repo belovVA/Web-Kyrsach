@@ -1,90 +1,91 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-    background-color: #6d8eb0;
-    color: white;
-    text-align: center;
-    padding: 20px 0;
+  background-color: #6d8eb0;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
 }
 
 .container {
-    display: flex;
-    margin: 20px;
+  display: flex;
+  margin: 20px;
 }
 
 aside {
-    width: 200px;
-    background-color: #3a699b;
-
-    margin-right: 20px;
+  width: 200px;
+  background-color: #3a699b;
+  margin-right: 20px;
 }
 
 aside nav a {
-    display: block;
-    color: rgb(187, 198, 223);
-    text-decoration: none;
-    margin: 10px 0;
+  display: block;
+  color: rgb(187, 198, 223);
+  text-decoration: none;
+  margin: 10px 0;
 }
 
 main {
-    flex: 1;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.controls {
-  margin-top: 10px; /* Промежуток между группами кнопок */
-  text-align: right; /* Выравнивание кнопок по правому краю */
-}
-
-.controls button {
-  margin-left: 10px; /* Промежуток между кнопками */
-}
-
-/* .controls {
-    display: flex;
-    justify-content: space-between;
-    
-    margin-bottom: 20px;
-} */
-
-button {
-    padding: 10px 20px;
-    background-color: #3a699b;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#adContainer .ad {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px;
-    margin-bottom: 10px;
-}
-
-
-#adContainer .ad {
-  background-color: white;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  flex: 1;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.controls {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.controls button {
+  margin-left: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #3a699b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#adContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#adContainer .ad {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  width: 80%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#adContainer .ad img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+#adContainer .ad h2 {
+  margin-top: 0;
+}
 
 #adContainer .ad p {
   margin: 5px 0;

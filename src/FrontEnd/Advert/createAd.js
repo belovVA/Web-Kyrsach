@@ -1,7 +1,6 @@
 $(document).ready(function() {
   const userId = localStorage.getItem('userId');
 
-  
   if (!userId) {
       window.location.href = '../LoginOrRegistration/logreg.html';
   }
@@ -10,8 +9,8 @@ $(document).ready(function() {
   loadUserProfile(userId);
 
   $('#backButton').click(function() {
-    window.location.href = '../main/main.html?userId=' + userId;
-});
+      window.location.href = '../main/main.html?userId=' + userId;
+  });
 
   // Отправка формы объявления
   $('#adForm').submit(function(event) {
@@ -24,10 +23,45 @@ $(document).ready(function() {
           date: $('#date').val(),
           location: $('#location').val(),
           contactName: $('#contactName').val(),
-          contactPhone: $('#contactPhone').val()
+          contactPhone: $('#contactPhone').val(),
+          userId: userId
       };
 
-      // Отправка данных на сервер для создания объявления
+      // Получение файла изображения и компрессия перед отправкой на сервер
+      const fileInput = $('#photo')[0];
+      if (fileInput.files && fileInput.files[0]) {
+          new Compressor(fileInput.files[0], {
+              quality: 0.6,
+              success(result) {
+                  const formData = new FormData();
+                  formData.append('photo', result);
+
+                  $.ajax({
+                      url: '/uploadPhoto',
+                      method: 'POST',
+                      data: formData,
+                      contentType: false,
+                      processData: false,
+                      success: function(response) {
+                          adData.photoUrl = response.photoUrl;
+                          sendAdData(adData);
+                      },
+                      error: function(error) {
+                          alert('Ошибка при загрузке фотографии!');
+                      }
+                  });
+              },
+              error(err) {
+                  console.error(err.message);
+              },
+          });
+      } else {
+          sendAdData(adData);
+      }
+  });
+
+  // Функция для отправки данных на сервер
+  function sendAdData(adData) {
       $.ajax({
           url: '/createAd',
           method: 'POST',
@@ -41,12 +75,6 @@ $(document).ready(function() {
               alert('Ошибка при добавлении объявления!');
           }
       });
-  });
-
-  // Функция для получения ID пользователя из URL
-  function getUserIdFromUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('userId');
   }
 
   // Функция для загрузки профиля пользователя для автозаполнения
