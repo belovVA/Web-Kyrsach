@@ -87,15 +87,30 @@ app.post('/createAd', async (req, res) => {
 
 
 // Маршрут для получения деталей объявления
+// Маршрут для получения деталей объявления
 app.get('/adDetail', async (req, res) => {
   const adId = req.query.id;
   console.log("ID:", adId);
   try {
-      const ad = await Announcement.findById(adId); // Используем модель Announcement
+      const ad = await Announcement.findById(adId);
       if (!ad) {
           return res.status(404).send('Объявление не найдено');
       }
-      res.json(ad);
+
+      // Найдем пользователя по userId
+      const user = await User.findById(ad.userId);
+      if (!user) {
+          return res.status(404).send('Пользователь не найден');
+      }
+
+      // Добавим данные пользователя к объявлению
+      const adDetail = {
+          ...ad.toObject(),
+          name: `${user.firstName} ${user.lastName}`,
+          phone: user.phone
+      };
+
+      res.json(adDetail);
   } catch (error) {
       console.error(error);
       res.status(500).send('Ошибка при получении объявления');
@@ -204,7 +219,7 @@ app.get('/ads', async (req, res) => {
 
   try {
     const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
-    console.log('Fetched ads:', ads); // Вывод данных в консоль
+    // console.log('Fetched ads:', ads); // Вывод данных в консоль
     res.json(ads);
   } catch (error) {
     console.error('Ошибка при получении объявлений:', error);
