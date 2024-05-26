@@ -1,6 +1,8 @@
 $(document).ready(function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get('userId');
+  $('#backButton').click(function() {
+    window.location.href = '../main/main.html?userId=' + userId;
+});
+  const userId = localStorage.getItem('userId');
 
   if (userId) {
       console.log('Пользователь с ID ' + userId + ' вошел в систему.');
@@ -18,7 +20,6 @@ $(document).ready(function() {
       adContainer.classList.add('ad');
       adContainer.setAttribute('data-id', ad._id);
 
-      
       const image = document.createElement('img');
       image.src = ad.photoUrl ? ad.photoUrl : 'default-image.jpg';
       image.alt = ad.title;
@@ -47,7 +48,7 @@ $(document).ready(function() {
 
       adContainer.addEventListener('click', () => {
           const adId = adContainer.getAttribute('data-id');
-          window.location.href = `../AdDetail/adDetail.html?adId=${adId}`;
+          window.location.href = `../EditAd/editAd.html?adId=${adId}`;
       });
 
       return adContainer;
@@ -58,7 +59,7 @@ $(document).ready(function() {
       container.innerHTML = '';
       console.log("Попытка загрузить объявления");
 
-      fetch(`/ads?sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
+      fetch(`/user-ads?userId=${userId}&sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
           .then(response => {
               if (!response.ok) {
                   throw new Error('Ошибка при загрузке данных');

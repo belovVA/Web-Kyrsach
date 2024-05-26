@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование объявления</title>
+    <link rel="stylesheet" href="./editAd.css">
+</head>
+<body>
+    <header>
+        <h1>Редактирование объявления</h1>
+    </header>
+    <div class="container">
+        <main>
+            <div class="ad-edit" id="adEditContainer">
+                <form id="editAdForm">
+                    <label for="title">Заголовок</label>
+                    <input type="text" id="title" name="title" required>
+                    
+                    <label for="description">Описание</label>
+                    <textarea id="description" name="description" required></textarea>
+                    
+                    <label for="date">Дата</label>
+                    <input type="date" id="date" name="date" required>
+                    
+                    <label for="location">Местоположение</label>
+                    <input type="text" id="location" name="location" required>
+                    
+                    <label for="status">Статус</label>
+                    <select id="status" name="status" required>
+                        <option value="false">Не найден</option>
+                        <option value="true">Найден</option>
+                    </select>
+                    
+                    <label for="name">Имя нашедшего</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    
+                    <label for="photoUrl">URL фотографии</label>
+                    <input type="url" id="photoUrl" name="photoUrl">
+
+                    <button type="submit">Сохранить изменения</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="editAd.js"></script>
+</body>
+</html>

@@ -1,7 +1,13 @@
 $(document).ready(function() {
+  const userId = localStorage.getItem('userId');
+
   const urlParams = new URLSearchParams(window.location.search);
   const adId = urlParams.get('adId');
   console.log("Ad ID:", adId);
+
+  $('#backButton').click(function() {
+    window.location.href = '../main/main.html?userId=' + userId;
+});
 
   // Функция для получения HTML кода для деталей объявления
   function getAdDetailHTML(ad) {

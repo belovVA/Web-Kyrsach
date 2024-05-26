@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бюро находок</title>
-    <link rel="stylesheet" href="main.css">
+    <title>Мои объявления</title>
+    <link rel="stylesheet" href="../main/main.css">
 </head>
 <body>
     <header>
-        <h1>Бюро находок</h1>
+        <h1>Мои объявления</h1>
     </header>
+    <button id="backButton">Назад</button>
+
     <div class="container">
-        <aside>
-            <nav id="userNav">
-                <a id="profileLink" href="../profile/profile.html" style="display:none;">Профиль</a>
-                <a id="AddAdvLink" href="../Advert/createAd.html">Создать объявление</a>
-                <a id="myAdsLink" href="../myads/myads.html" style="display:none;">Мои объявления</a>
-                <a id="logoutLink" href="#" style="display:none;">Выход</a>
-                <a id="loginRegisterLink" href="../LoginOrRegistration/logreg.html">Вход и Регистрация</a>
-            </nav>
-        </aside>
+       
         <main>
             <div class="controls">
                 <button id="last7DaysButton">За последние 7 дней</button>
@@ -32,11 +26,11 @@
                 <hr>
             </div>
             <div class="container" id="adContainer">
-                <h4>Объявления</h4>
+                <h4>Мои объявления</h4>
             </div>
         </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="main.js"></script>
+    <script src="myads.js"></script>
 </body>
 </html>

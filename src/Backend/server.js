@@ -10,6 +10,9 @@ const app = express();
 const PORT = 3000;
 const JWT_SECRET = 'your_jwt_secret';
 
+// Обслуживание статических файлов из директории "uploads"
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 mongoose.connect('mongodb://localhost:27017/lostAndFound', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const userSchema = new mongoose.Schema({
@@ -118,6 +121,27 @@ app.get('/adDetail', async (req, res) => {
 });
 
 
+// Маршрут для обновления объявления
+app.put('/updateAd', async (req, res) => {
+  const { id, title, description, date, location, status, name, phone, photoUrl } = req.body;
+
+  try {
+      const updatedAd = await Announcement.findByIdAndUpdate(id, {
+          title,
+          description,
+          date,
+          location,
+          status,
+          name,
+          phone,
+          photoUrl
+      }, { new: true });
+      res.json(updatedAd);
+  } catch (error) {
+      console.error('Ошибка при обновлении объявления:', error);
+      res.status(500).send('Ошибка при обновлении объявления');
+  }
+});
 
 
 // Регистрация
@@ -205,27 +229,52 @@ app.put('/profile/:userId', async (req, res) => {
 });
 
 
-
-app.get('/ads', async (req, res) => {
-  const { sortByDate, filterStatus, daysRange } = req.query;
+// Маршрут для получения объявлений пользователя по userId
+app.get('/user-ads', async (req, res) => {
+  const { userId, sortByDate, filterStatus, daysRange } = req.query;
   const dateLimit = new Date();
   dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
 
-  let filter = { date: { $gte: dateLimit } };
+  let filter = { date: { $gte: dateLimit }, userId: userId };
 
+  // console.log(filter);
   if (filterStatus !== undefined) {
-    filter.status = filterStatus === 'true';
-  }
+    if (filterStatus === 'true' || filterStatus === 'false') {
+        filter.status = filterStatus === 'true';
+    }
+}
 
-  try {
+try {
     const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
     // console.log('Fetched ads:', ads); // Вывод данных в консоль
     res.json(ads);
-  } catch (error) {
+} catch (error) {
     console.error('Ошибка при получении объявлений:', error);
     res.status(500).send('Ошибка при получении объявлений');
-  }
+}
 });
+
+  app.get('/ads', async (req, res) => {
+    const { sortByDate, filterStatus, daysRange } = req.query;
+    const dateLimit = new Date();
+    dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
+
+    let filter = { date: { $gte: dateLimit } };
+    if (filterStatus !== undefined) {
+      if (filterStatus === 'true' || filterStatus === 'false') {
+          filter.status = filterStatus === 'true';
+      }
+  }
+  
+  try {
+      const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
+      // console.log('Fetched ads:', ads); // Вывод данных в консоль
+      res.json(ads);
+  } catch (error) {
+      console.error('Ошибка при получении объявлений:', error);
+      res.status(500).send('Ошибка при получении объявлений');
+  }
+  });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
