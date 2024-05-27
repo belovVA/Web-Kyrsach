@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  const userId = localStorage.getItem('userId');
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('userId');
 
   if (!userId) {
       window.location.href = '../LoginOrRegistration/logreg.html';
@@ -8,16 +9,19 @@ $(document).ready(function() {
   loadUserProfile(userId);
 
   $('#editButton').click(function() {
-      $('#passwordFields').show();
+      $('#profileForm input').not('#newPassword, #confirmPassword').removeAttr('readonly');
       $('#editButton').hide();
       $('#saveButton').show();
-      $('#profileForm input').removeAttr('readonly');
+  });
+
+  $('#editPasswordButton').click(function() {
+      $('#passwordFields').toggle();
   });
 
   $('#profileForm').submit(function(event) {
       event.preventDefault();
 
-      if ($('#newPassword').val() !== $('#confirmPassword').val()) {
+      if ($('#passwordFields').is(':visible') && $('#newPassword').val() !== $('#confirmPassword').val()) {
           alert('Пароли не совпадают!');
           return;
       }
@@ -27,7 +31,7 @@ $(document).ready(function() {
           firstName: $('#name').val(),
           middleName: $('#middlename').val(),
           phone: $('#phone').val(),
-          password: $('#newPassword').val() ? $('#newPassword').val() : undefined // Если пароль не указан, то это поле будет undefined
+          password: $('#passwordFields').is(':visible') ? $('#newPassword').val() : undefined
       };
 
       $.ajax({
@@ -49,8 +53,26 @@ $(document).ready(function() {
   });
 
   $('#backButton').click(function() {
-    window.location.href = '../main/main.html?userId=' + userId;
-});
+      window.location.href = '../main/main.html?userId=' + userId;
+  });
+
+  $('#deleteButton').click(function() {
+      if (confirm('Вы уверены, что хотите удалить свою учетную запись? Это действие необратимо.')) {
+          $.ajax({
+              url: '/profile/' + userId,
+              method: 'DELETE',
+              success: function(response) {
+                  alert('Учетная запись успешно удалена!');
+                  localStorage.removeItem('userId');
+                  window.location.href = '../LoginOrRegistration/logreg.html';
+              },
+              error: function(error) {
+                  alert('Ошибка при удалении учетной записи!');
+              }
+          });
+      }
+  });
+
   function loadUserProfile(userId) {
       $.get('/profile/' + userId, function(user) {
           $('#surname').val(user.lastName);

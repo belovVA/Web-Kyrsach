@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
     middleName: String,
     phone: { type: String, unique: true },
     birthday: Date,
-    password: String
+    password: String,
+    role: { type: String, default: 'user' }
 });
 
 const announcementSchema = new mongoose.Schema({
@@ -31,7 +32,9 @@ const announcementSchema = new mongoose.Schema({
     date: Date,
     location: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    status: { type: Boolean, default: false }
+    status: { type: Boolean, default: false },
+    enum: ['На рассмотрении', 'Принято', 'Отклонено'],
+        default: 'На рассмотрении'
 });
 
 const User = mongoose.model('User', userSchema);
@@ -172,7 +175,8 @@ app.post('/register', async (req, res) => {
           middleName,
           phone,
           birthday,
-          password: hashedPassword
+          password: hashedPassword,
+          role: 'user' 
       });
       await user.save();
       res.status(201).send('User registered successfully');
@@ -240,6 +244,18 @@ app.put('/profile/:userId', async (req, res) => {
     }
 });
 
+// Удаление учетной записи пользователя
+app.delete('/profile/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+      await User.findByIdAndDelete(userId);
+      res.status(200).send('User deleted successfully');
+  } catch (error) {
+      res.status(500).send('Error deleting user');
+  }
+});
+
 
 // Маршрут для получения объявлений пользователя по userId
 app.get('/user-ads', async (req, res) => {
@@ -287,6 +303,74 @@ try {
       res.status(500).send('Ошибка при получении объявлений');
   }
   });
+
+  app.post('/usersNew', async (req, res) => {
+    const { lastName, firstName, middleName, phone, role, password } = req.body;
+
+    try {
+      console.log('Received data:', req.body);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({
+            lastName,
+            firstName,
+            middleName,
+            phone,
+            role,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        res.status(201).send('User created successfully');
+    } catch (error) {
+        res.status(500).send('Error creating user');
+    }
+});
+
+  // Получение списка пользователей
+app.get('/users', async (req, res) => {
+  try {
+      const users = await User.find();
+      res.json(users);
+  } catch (error) {
+      res.status(500).send('Ошибка при получении списка пользователей');
+  }
+});
+
+// Получение списка пользователей по роли
+app.get('/usersByRole', async (req, res) => {
+  const { role } = req.query;
+
+  try {
+      const users = await User.find({ role });
+      res.json(users);
+  } catch (error) {
+      res.status(500).send('Ошибка при получении списка пользователей');
+  }
+});
+
+// Получение отсортированного списка пользователей
+app.get('/sortedUsers', async (req, res) => {
+  const { sortBy } = req.query;
+
+  try {
+      const users = await User.find().sort(sortBy);
+      res.json(users);
+  } catch (error) {
+      res.status(500).send('Ошибка при получении списка пользователей');
+  }
+});
+
+app.get('/adsModeration', async (req, res) => {
+  const { status } = req.query;
+
+  try {
+      const ads = await Ad.find(status ? { status } : {});
+      res.status(200).json(ads);
+  } catch (error) {
+      console.error('Error fetching ads:', error);
+      res.status(500).send('Error fetching ads');
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

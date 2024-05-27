@@ -11,7 +11,7 @@ header {
   text-align: center;
   padding: 20px 0;
 }
-/* Дополнительные стили для страницы профиля */
+
 #profileContainer {
   max-width: 600px;
   margin: 0 auto;
@@ -21,12 +21,12 @@ header {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#profileForm label {
+#createUserForm label {
   display: block;
   margin-top: 10px;
 }
 
-#profileForm input {
+#createUserForm input, #profileForm select {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
@@ -34,7 +34,7 @@ header {
   border-radius: 4px;
 }
 
-#profileForm button {
+#createUserForm button {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #3a699b;
@@ -44,12 +44,11 @@ header {
   cursor: pointer;
 }
 
-#profileForm button:hover {
+#createUserForm button:hover {
   background-color: #0056b3;
-  
 }
 
-#backButton{
+#backButton {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #3a699b;
@@ -60,33 +59,5 @@ header {
 }
 
 #backButton:hover {
-  background-color: #0056b3;
-}
-
-#deleteButton {
-  background-color: red;
-  color: white;
-  padding: 10px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#deleteButton:hover {
-  background-color: darkred;
-}
-
-#editPasswordButton {
-  background-color: #3a699b;
-  color: white;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#editPasswordButton:hover {
   background-color: #0056b3;
 }

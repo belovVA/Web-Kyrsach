@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модерация объявлений</title>
+    <link rel="stylesheet" href="moderation.css">
+</head>
+<body>
+    <header>
+        <h1>Модерация объявлений</h1>
+    </header>
+    <button id="backButton">Назад</button>
+
+    <div class="container">
+        <div class="filters">
+            <button class="filter-button" data-status="На рассмотрении">На рассмотрении</button>
+            <button class="filter-button" data-status="Принято">Принятые</button>
+            <button class="filter-button" data-status="Отклонено">Отклоненные</button>
+        </div>
+        <main>
+            <div id="adsContainer">
+                <!-- Объявления будут загружаться сюда -->
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="moderation.js"></script>
+</body>
+</html>

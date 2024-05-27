@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать пользователя</title>
+    <link rel="stylesheet" href="./createUser.css">
+</head>
+<body>
+    <header>
+        <h1>Создать пользователя</h1>
+    </header>
+    <button id="backButton">Назад</button>
+
+    <div class="container">
+        <main>
+            <div id="profileContainer">
+                <form id="createUserForm">
+                    <label for="surname">Фамилия:</label>
+                    <input type="text" id="surname" name="surname" required>
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="middlename">Отчество:</label>
+                    <input type="text" id="middlename" name="middlename">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="text" id="phone" name="phone" required>
+                    <label for="role">Роль:</label>
+                    <select id="role" name="role" required>
+                        <option value="user">User</option>
+                        <option value="moderator">Moderator</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required>
+                    <label for="confirmPassword">Подтвердите пароль:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <div id="createButtons">
+                        <button type="submit" id="saveButton">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="createUser.js"></script>
+</body>
+</html>

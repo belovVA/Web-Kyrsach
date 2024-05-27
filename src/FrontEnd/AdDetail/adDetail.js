@@ -35,12 +35,10 @@ $(document).ready(function() {
       const phone = document.createElement('p');
       phone.textContent = `Телефон: ${ad.phone}`;
 
-      if (ad.photoUrl) {
-          const image = document.createElement('img');
-          image.src = ad.photoUrl;
-          image.alt = ad.title;
-          adContainer.appendChild(image);
-      }
+      const image = document.createElement('img');
+    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : '../uploads/default-image.jpg'; // Загрузка изображения по пути из объявления
+    image.alt = ad.title;
+    adContainer.appendChild(image);
 
       adContainer.appendChild(title);
       adContainer.appendChild(description);

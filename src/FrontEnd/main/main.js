@@ -1,14 +1,49 @@
 $(document).ready(function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get('userId');
+  // const urlParams = new URLSearchParams(window.location.search);
+  const userId = localStorage.getItem('userId');
 
   if (userId) {
+    $('#profileLink').attr('href', `../profile/profile.html?userId=${userId}`).show();
       console.log('Пользователь с ID ' + userId + ' вошел в систему.');
-      $('#profileLink').show();
-      $('#myAdsLink').show();
-      $('#settingsLink').show();
-      $('#logoutLink').show();
-      $('#loginRegisterLink').hide();
+      // Получаем информацию о пользователе с сервера
+      fetch(`/profile/${userId}`)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Ошибка при загрузке профиля пользователя');
+              }
+              return response.json();
+          })
+          .then(user => {
+              console.log('Получен профиль пользователя:', user);
+              // Проверяем роль пользователя
+              if (user.role === 'admin') {
+                  $('#profileLink').show();
+                  $('#myAdsLink').show();
+                  $('#settingsLink').show();
+                  $('#logoutLink').show();
+                  $('#loginRegisterLink').hide();
+                  // Показываем элементы для администратора
+                  $('#adminControls').show();
+              } else if (user.role === 'moderator') {
+                  $('#profileLink').show();
+                  $('#myAdsLink').show();
+                  $('#settingsLink').show();
+                  $('#logoutLink').show();
+                  $('#loginRegisterLink').hide();
+                  // Показываем элементы для модератора
+                  $('#moderatorControls').show();
+              } else {
+                  $('#profileLink').show();
+                  $('#myAdsLink').show();
+                  $('#settingsLink').show();
+                  $('#logoutLink').show();
+                  $('#loginRegisterLink').hide();
+              }
+          })
+          .catch(error => {
+              console.error('Ошибка:', error);
+              $('#loginRegisterLink').show();
+          });
   } else {
       console.log('Пользователь не вошел в систему.');
   }
@@ -20,7 +55,7 @@ $(document).ready(function() {
 
       
       const image = document.createElement('img');
-    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : 'default-image.jpg'; // Загрузка изображения по пути из объявления
+    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : '../uploads/default-image.jpg'; // Загрузка изображения по пути из объявления
     image.alt = ad.title;
     adContainer.appendChild(image);
 

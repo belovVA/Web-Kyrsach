@@ -11,15 +11,24 @@
         <h1>Бюро находок</h1>
     </header>
     <div class="container">
-        <aside>
-            <nav id="userNav">
-                <a id="profileLink" href="../profile/profile.html" style="display:none;">Профиль</a>
-                <a id="AddAdvLink" href="../Advert/createAd.html">Создать объявление</a>
-                <a id="myAdsLink" href="../myads/myads.html" style="display:none;">Мои объявления</a>
-                <a id="logoutLink" href="#" style="display:none;">Выход</a>
-                <a id="loginRegisterLink" href="../LoginOrRegistration/logreg.html">Вход и Регистрация</a>
-            </nav>
-        </aside>
+      <aside>
+        <nav id="userNav">
+          <a id="profileLink" href="../profile/profile.html?userId=" style="display:none;">Профиль</a>
+            <a id="AddAdvLink" href="../Advert/createAd.html">Создать объявление</a>
+            <a id="myAdsLink" href="../myads/myads.html" style="display:none;">Мои объявления</a>
+            <a id="logoutLink" href="#" style="display:none;">Выход</a>
+            <a id="loginRegisterLink" href="../LoginOrRegistration/logreg.html">Вход и Регистрация</a>
+            <!-- Элементы для администратора -->
+            <div id="adminControls" style="display:none;">
+                <a href="../admin/manageAccounts/manageAccounts.html">Управление учетными записями</a>
+            </div>
+            <!-- Элементы для модератора -->
+            <div id="moderatorControls" style="display:none;">
+                <a href="../moderator/moderation.html">Модерация объявлений</a>
+            </div>
+        </nav>
+    </aside>
+    
         <main>
             <div class="controls">
                 <button id="last7DaysButton">За последние 7 дней</button>

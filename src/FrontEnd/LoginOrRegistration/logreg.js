@@ -45,14 +45,14 @@ $(document).ready(function() {
           data: JSON.stringify(loginData),
           contentType: 'application/json',
           success: function(response) {
-            alert('Вход успешен!');
-            localStorage.setItem('userId', response.userId);
-            // Перенаправление на страницу main.html с передачей ID пользователя
-            window.location.href = '../main/main.html?userId=' + response.userId;
-        },
-        error: function(error) {
-            alert('Ошибка входа!');
-        }
+              alert('Вход успешен!');
+              localStorage.setItem('userId', response.userId);
+              // Перенаправление на страницу main.html
+              window.location.href = '../main/main.html';
+          },
+          error: function(error) {
+              alert('Ошибка входа!');
+          }
       });
   });
 
@@ -80,10 +80,10 @@ $(document).ready(function() {
           }
       });
   });
+
+  
 });
 
 function goToMain() {
   window.location.href = '../main/main.html';
 }
-
-

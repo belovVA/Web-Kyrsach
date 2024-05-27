@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление учетными записями</title>
+    <link rel="stylesheet" href="manageAccounts.css">
+</head>
+<body>
+    <header>
+        <h1>Управление учетными записями</h1>
+    </header>
+    <div class="container">
+        <aside>
+            <nav id="userNav">
+                
+                <a id="logoutLink" href="#">Выход</a>
+            </nav>
+        </aside>
+        <main>
+            <div class="controls">
+              <a id="addUserButton" href="../createUser/createUser.html" >Добавить пользователя</a>
+<hr>
+              <button id="allUsersButton">Все пользователи</button>
+                <button id="userGuestButton">User/Guest</button>
+                <button id="staffButton">Staff</button>
+                <button id="adminButton">Admin</button>
+                <button id="resetButton">Сброс</button>
+                <hr>
+            </div>
+            <div class="container" id="userContainer">
+                <h4>Пользователи</h4>
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="manageAccounts.js"></script>
+</body>
+</html>
