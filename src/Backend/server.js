@@ -43,38 +43,50 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.static(path.join(__dirname, '../FrontEnd')));
 
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = path.join(__dirname, '../Frontend/uploads');
+
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
 }
+const multer = require('multer');
 
-app.post('/uploadPhoto', (req, res) => {
-  let photoData = '';
-
-  req.on('data', chunk => {
-      photoData += chunk;
-  });
-
-  req.on('end', () => {
-      const photoBuffer = Buffer.from(photoData.split(',')[1], 'base64');
-      const photoPath = path.join(uploadsDir, `${Date.now()}.jpg`);
-      fs.writeFile(photoPath, photoBuffer, err => {
-          if (err) {
-              console.error('Ошибка при сохранении фото:', err);
-              return res.status(500).send('Ошибка при сохранении фото');
-          }
-          res.json({ photoUrl: photoPath });
-      });
-  });
+// Создаем хранилище для загруженных файлов
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}${ext}`);
+  }
 });
+const upload = multer({ storage: storage });
+
+// Инициализируем загрузчик multer
+
+// Маршрут для загрузки фото
+app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('Не удалось загрузить файл');
+  }
+  
+  const photoUrl = req.file.filename; // Имя файла без пути
+  res.json({ photoUrl: photoUrl });
+});
+
+
+
 
 app.post('/createAd', async (req, res) => {
   const { title, photoUrl, description, date, location, userId } = req.body;
 
   try {
+      // Извлекаем имя файла из URL изображения
+      const photoFileName = photoUrl.split('/').pop();
+
       const announcement = new Announcement({
           title,
-          photoUrl,
+          photoUrl: photoFileName, // Сохраняем только имя файла
           description,
           date,
           location,

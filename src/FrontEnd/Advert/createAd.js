@@ -27,33 +27,26 @@ $(document).ready(function() {
           userId: userId
       };
 
-      // Получение файла изображения и компрессия перед отправкой на сервер
+      // Получение файла изображения
       const fileInput = $('#photo')[0];
       if (fileInput.files && fileInput.files[0]) {
-          new Compressor(fileInput.files[0], {
-              quality: 0.6,
-              success(result) {
-                  const formData = new FormData();
-                  formData.append('photo', result);
+          const formData = new FormData();
+          formData.append('photo', fileInput.files[0]);
 
-                  $.ajax({
-                      url: '/uploadPhoto',
-                      method: 'POST',
-                      data: formData,
-                      contentType: false,
-                      processData: false,
-                      success: function(response) {
-                          adData.photoUrl = response.photoUrl;
-                          sendAdData(adData);
-                      },
-                      error: function(error) {
-                          alert('Ошибка при загрузке фотографии!');
-                      }
-                  });
+          // Отправка файла на сервер
+          $.ajax({
+              url: '/uploadPhoto',
+              method: 'POST',
+              data: formData,
+              contentType: false,
+              processData: false,              
+              success: function(response) {
+                  adData.photoUrl = response.photoUrl;
+                  sendAdData(adData);
               },
-              error(err) {
-                  console.error(err.message);
-              },
+              error: function(error) {
+                  alert('Ошибка при загрузке фотографии!');
+              }
           });
       } else {
           sendAdData(adData);

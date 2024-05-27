@@ -20,7 +20,11 @@ $(document).ready(function() {
 
       
       const image = document.createElement('img');
-      image.src = ad.photoUrl ? ad.photoUrl : 'default-image.jpg';
+    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : 'default-image.jpg'; // Загрузка изображения по пути из объявления
+    image.alt = ad.title;
+    adContainer.appendChild(image);
+
+
       image.alt = ad.title;
       adContainer.appendChild(image);
 
