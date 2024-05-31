@@ -25,17 +25,20 @@ const userSchema = new mongoose.Schema({
     role: { type: String, default: 'user' }
 });
 
-const announcementSchema = new mongoose.Schema({
-    title: String,
-    photoUrl: String, // поле для хранения URL изображения
-    description: String,
-    date: Date,
-    location: String,
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    status: { type: Boolean, default: false },
-    enum: ['На рассмотрении', 'Принято', 'Отклонено'],
-        default: 'На рассмотрении'
-});
+    const announcementSchema = new mongoose.Schema({
+        title: String,
+        photoUrl: String, // поле для хранения URL изображения
+        description: String,
+        date: Date,
+        location: String,
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        status: { type: Boolean, default: false },
+        moderationStatus: {
+          type: String,
+          enum: ['Watching', 'Accepted', 'Canceled'],
+          default: 'Watching'
+      }
+    });
 
 const User = mongoose.model('User', userSchema);
 const Announcement = mongoose.model('Announcement', announcementSchema);
@@ -85,7 +88,10 @@ app.post('/createAd', async (req, res) => {
 
   try {
       // Извлекаем имя файла из URL изображения
-      const photoFileName = photoUrl.split('/').pop();
+      let photoFileName = '';
+      if (photoUrl !== undefined){
+          photoFileName = photoUrl.split('/').pop();
+      } 
 
       const announcement = new Announcement({
           title,
@@ -137,8 +143,9 @@ app.get('/adDetail', async (req, res) => {
 
 
 // Маршрут для обновления объявления
+// Маршрут для обновления объявления
 app.put('/updateAd', async (req, res) => {
-  const { id, title, description, date, location, status, name, phone, photoUrl } = req.body;
+  const { id, title, description, date, location, status, moderationStatus, name, phone, photoUrl } = req.body;
 
   try {
       const updatedAd = await Announcement.findByIdAndUpdate(id, {
@@ -147,6 +154,7 @@ app.put('/updateAd', async (req, res) => {
           date,
           location,
           status,
+          moderationStatus,
           name,
           phone,
           photoUrl
@@ -157,6 +165,7 @@ app.put('/updateAd', async (req, res) => {
       res.status(500).send('Ошибка при обновлении объявления');
   }
 });
+
 
 
 // Регистрация
@@ -265,44 +274,57 @@ app.get('/user-ads', async (req, res) => {
 
   let filter = { date: { $gte: dateLimit }, userId: userId };
 
-  // console.log(filter);
   if (filterStatus !== undefined) {
-    if (filterStatus === 'true' || filterStatus === 'false') {
-        filter.status = filterStatus === 'true';
-    }
-}
-
-try {
-    const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
-    // console.log('Fetched ads:', ads); // Вывод данных в консоль
-    res.json(ads);
-} catch (error) {
-    console.error('Ошибка при получении объявлений:', error);
-    res.status(500).send('Ошибка при получении объявлений');
-}
-});
-
-  app.get('/ads', async (req, res) => {
-    const { sortByDate, filterStatus, daysRange } = req.query;
-    const dateLimit = new Date();
-    dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
-
-    let filter = { date: { $gte: dateLimit } };
-    if (filterStatus !== undefined) {
       if (filterStatus === 'true' || filterStatus === 'false') {
           filter.status = filterStatus === 'true';
       }
   }
-  
+
   try {
       const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
-      // console.log('Fetched ads:', ads); // Вывод данных в консоль
+      
+      // Группировка объявлений по moderationStatus
+      const groupedAds = ads.reduce((acc, ad) => {
+          const status = ad.moderationStatus;
+          if (!acc[status]) {
+              acc[status] = [];
+          }
+          acc[status].push(ad);
+          return acc;
+      }, {});
+
+      res.json(groupedAds);
+  } catch (error) {
+      console.error('Ошибка при получении объявлений:', error);
+      res.status(500).send('Ошибка при получении объявлений');
+  }
+});
+
+app.get('/ads', async (req, res) => {
+  const { sortByDate, filterStatus, daysRange } = req.query;
+  const dateLimit = new Date();
+  dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
+
+  let filter = { 
+      date: { $gte: dateLimit },
+      moderationStatus: 'Accepted' // Добавлено условие фильтрации
+  };
+  
+  if (filterStatus !== undefined) {
+      if (filterStatus === 'true' || filterStatus === 'false') {
+          filter.status = filterStatus === 'true';
+      }
+  }
+
+  try {
+      const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
       res.json(ads);
   } catch (error) {
       console.error('Ошибка при получении объявлений:', error);
       res.status(500).send('Ошибка при получении объявлений');
   }
-  });
+});
+
 
   app.post('/usersNew', async (req, res) => {
     const { lastName, firstName, middleName, phone, role, password } = req.body;
@@ -361,16 +383,31 @@ app.get('/sortedUsers', async (req, res) => {
 });
 
 app.get('/adsModeration', async (req, res) => {
-  const { status } = req.query;
+  const {moderationStatus } = req.query;
+  
+  const filter = {};
+  
+  // if (moderationStatus) {
+  // console.log(moderationStatus);
+
+      filter.moderationStatus = moderationStatus;
+      console.log(filter);
+      console.log(filter.moderationStatus);
+
+  // }
 
   try {
-      const ads = await Ad.find(status ? { status } : {});
-      res.status(200).json(ads);
+      let ads;
+      
+          ads = await Announcement.find(filter);
+      res.json(ads);
   } catch (error) {
-      console.error('Error fetching ads:', error);
-      res.status(500).send('Error fetching ads');
+      console.error('Ошибка при получении объявлений:', error);
+      res.status(500).send('Ошибка при получении объявлений');
   }
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
