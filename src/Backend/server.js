@@ -219,6 +219,24 @@ app.post('/login', async (req, res) => {
       res.status(500).send('Error logging in');
   }
 });
+
+app.delete('/deleteAd', async (req, res) => {
+  const { id } = req.body;
+
+  try {
+      const ad = await Announcement.findById(id);
+      if (ad) {
+          await Announcement.findByIdAndDelete(id);
+          res.status(200).send({ message: 'Объявление успешно удалено' });
+      } else {
+          res.status(404).send({ message: 'Объявление не найдено' });
+      }
+  } catch (error) {
+      console.error('Ошибка при удалении объявления:', error);
+      res.status(500).send('Ошибка при удалении объявления');
+  }
+});
+
 // Загрузка профиля пользователя
 app.get('/profile/:userId', async (req, res) => {
     const userId = req.params.userId;

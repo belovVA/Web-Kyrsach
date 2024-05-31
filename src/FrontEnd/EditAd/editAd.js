@@ -37,6 +37,25 @@ $(document).ready(function() {
       });
   }
 
+  function deleteAd() {
+    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+        $.ajax({
+            url: '/deleteAd',
+            method: 'DELETE',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: adId }),
+            success: function(response) {
+                alert('Объявление удалено');
+                window.location.href = '../myAds/myAds.html';
+            },
+            error: function(error) {
+                alert('Ошибка при удалении объявления');
+                console.error('Error deleting ad:', error);
+            }
+        });
+    }
+}
+
   // Функция для включения режима редактирования
   function enableEditing() {
       $('.editable').each(function() {
@@ -114,6 +133,7 @@ $(document).ready(function() {
   $('#editButton').click(enableEditing);
   $('#saveButton').click(saveChanges);
   $('#cancelButton').click(cancelChanges);
+  $('#deleteButton').click(deleteAd);
 
   // Изначальная загрузка деталей объявления
   loadAdDetail();
