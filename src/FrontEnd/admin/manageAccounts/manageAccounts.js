@@ -79,7 +79,7 @@ $(document).ready(function() {
   });
 
   $('#staffButton').click(function() {
-      loadUsers('staff');
+      loadUsers('moderator');
   });
 
   $('#adminButton').click(function() {

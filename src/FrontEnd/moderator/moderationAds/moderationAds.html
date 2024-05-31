@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Модерация объявлений</title>
-    <link rel="stylesheet" href="moderation.css">
+    <link rel="stylesheet" href="moderationAds.css">
 </head>
 <body>
     <header>
@@ -14,9 +14,10 @@
 
     <div class="container">
         <div class="filters">
-            <button class="filter-button" data-status="На рассмотрении">На рассмотрении</button>
-            <button class="filter-button" data-status="Принято">Принятые</button>
-            <button class="filter-button" data-status="Отклонено">Отклоненные</button>
+          <button class="filter-button" id="pendingButton">Watching</button>
+          <button class="filter-button" id="acceptedButton">Accepted</button>
+          <button class="filter-button" id="rejectedButton">Canceled</button>
+            
         </div>
         <main>
             <div id="adsContainer">
@@ -25,6 +26,6 @@
         </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="moderation.js"></script>
+    <script src="moderationAds.js"></script>
 </body>
 </html>

@@ -26,6 +26,11 @@ header {
   margin-top: 10px;
 }
 
+.image {
+  width: 75%;
+  height: 25%;
+}
+
 #profileForm input {
   width: 100%;
   padding: 8px;

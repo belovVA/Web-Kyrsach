@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  const owner = localStorage.getItem('userId');
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('userId');
 
@@ -8,6 +9,21 @@ $(document).ready(function() {
 
   loadUserProfile(userId);
 
+  function checkrule() {
+    $.get('/profile/' + owner, function(ownerData) {
+        $.get('/profile/' + userId, function(userData) {
+            if (owner !== userId) {
+                if (ownerData.role === 'admin' && userData.role === 'admin') {
+                    $('#editButton').hide();
+                    $('#editPasswordButton').hide();
+                    $('#deleteButton').hide();
+                }
+            }
+        });
+    });
+}
+
+checkrule();
   $('#editButton').click(function() {
       $('#profileForm input').not('#newPassword, #confirmPassword').removeAttr('readonly');
       $('#editButton').hide();
@@ -63,8 +79,14 @@ $(document).ready(function() {
               method: 'DELETE',
               success: function(response) {
                   alert('Учетная запись успешно удалена!');
-                  localStorage.removeItem('userId');
+                  if (owner !== userId){
+                    window.location.href = '../admin/manageAccounts/manageAccounts.html'
+                  } else{
+                    localStorage.removeItem('userId');
+                  
                   window.location.href = '../LoginOrRegistration/logreg.html';
+                  }
+                  
               },
               error: function(error) {
                   alert('Ошибка при удалении учетной записи!');

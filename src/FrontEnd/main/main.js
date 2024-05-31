@@ -55,7 +55,7 @@ $(document).ready(function() {
 
       
       const image = document.createElement('img');
-    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : '../uploads/default-image.jpg'; // Загрузка изображения по пути из объявления
+    image.src = ad.photoUrl ? `../uploads/${ad.photoUrl}` : '../uploads/no-image-thumb.jpg'; // Загрузка изображения по пути из объявления
     image.alt = ad.title;
     adContainer.appendChild(image);
 

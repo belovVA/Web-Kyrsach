@@ -43,7 +43,8 @@ $(document).ready(function() {
           status: $('#status').val() === 'true',
           name: $('#name').val(),
           phone: $('#phone').val(),
-          photoUrl: $('#photoUrl').val()
+          photoUrl: $('#photoUrl').val(),
+          moderationStatus: 'Watching'
       };
 
       fetch('/updateAd', {

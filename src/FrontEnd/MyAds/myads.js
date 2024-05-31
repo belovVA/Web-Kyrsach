@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#backButton').click(function() {
-    window.location.href = '../main/main.html?userId=' + userId;
-});
+      window.location.href = '../main/main.html?userId=' + userId;
+  });
   const userId = localStorage.getItem('userId');
 
   if (userId) {
@@ -21,7 +21,7 @@ $(document).ready(function() {
       adContainer.setAttribute('data-id', ad._id);
 
       const image = document.createElement('img');
-      image.src = ad.photoUrl ? ad.photoUrl : 'default-image.jpg';
+      image.src = ad.photoUrl ?  '../uploads/' + ad.photoUrl : '../uploads/no-image-thumb.jpg';
       image.alt = ad.title;
       adContainer.appendChild(image);
 
@@ -69,9 +69,22 @@ $(document).ready(function() {
           .then(data => {
               console.log('Fetched ads:', data);
               container.innerHTML = '';
-              data.forEach(ad => {
-                  container.appendChild(getAdHTML(ad));
-              });
+
+              // Отображение объявлений, сгруппированных по moderationStatus
+              for (const status in data) {
+                  const statusContainer = document.createElement('div');
+                  statusContainer.classList.add('status-group');
+                  
+                  const statusHeader = document.createElement('h3');
+                  statusHeader.textContent = `Статус модерации: ${status}`;
+                  statusContainer.appendChild(statusHeader);
+
+                  data[status].forEach(ad => {
+                      statusContainer.appendChild(getAdHTML(ad));
+                  });
+
+                  container.appendChild(statusContainer);
+              }
           })
           .catch(error => {
               console.error('Ошибка:', error);
