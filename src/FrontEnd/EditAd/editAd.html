@@ -3,48 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактирование объявления</title>
-    <link rel="stylesheet" href="./editAd.css">
+    <title>Детали объявления</title>
+    <link rel="stylesheet" href="editAd.css">
 </head>
 <body>
     <header>
-        <h1>Редактирование объявления</h1>
-    </header>
-    <div class="container">
-        <main>
-            <div class="ad-edit" id="adEditContainer">
-                <form id="editAdForm">
-                    <label for="title">Заголовок</label>
-                    <input type="text" id="title" name="title" required>
-                    
-                    <label for="description">Описание</label>
-                    <textarea id="description" name="description" required></textarea>
-                    
-                    <label for="date">Дата</label>
-                    <input type="date" id="date" name="date" required>
-                    
-                    <label for="location">Местоположение</label>
-                    <input type="text" id="location" name="location" required>
-                    
-                    <label for="status">Статус</label>
-                    <select id="status" name="status" required>
-                        <option value="false">Не найден</option>
-                        <option value="true">Найден</option>
-                    </select>
-                    
-                    <label for="name">Имя нашедшего</label>
-                    <input type="text" id="name" name="name" required>
-                    
-                    <label for="phone">Телефон</label>
-                    <input type="tel" id="phone" name="phone" required>
-                    
-                    <label for="photoUrl">URL фотографии</label>
-                    <input type="url" id="photoUrl" name="photoUrl">
+        <h1>Детали объявления</h1>
+    <button id="backButton">Назад</button>
 
-                    <button type="submit">Сохранить изменения</button>
-                </form>
+    </header>
+
+    <div class="container">
+        <div class="ad-detail">
+            <div class="image-container">
+                <img id="adImage" src="" alt="Фото объявления">
+                <input type="file" id="adImageUpload" style="display:none;">
             </div>
-        </main>
+            <div class="details-container">
+                <h2 id="adTitle" class="editable">Заголовок</h2>
+                <p><strong>Дата:</strong> <span id="adDate" class="editable">01.01.2024</span></p>
+                <p><strong>Местоположение:</strong> <span id="adLocation" class="editable">Город</span></p>
+                <p><strong>Статус:</strong> <span id="adStatus" class="editable">Найден/Не найден</span></p>
+                <p><strong>Имя нашедшего:</strong> <span id="adName" class="editable">Имя</span></p>
+                <p><strong>Телефон:</strong> <span id="adPhone" class="editable">1234567890</span></p>
+                <p><strong>Описание:</strong> <span id="adDescription" class="editable">Это описание объявления.</span></p>
+                <div class="buttons">
+                    <button id="editButton">Редактировать</button>
+                    <button id="saveButton" style="display:none;">Сохранить</button>
+                    <button id="cancelButton" style="display:none;">Отменить</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="editAd.js"></script>

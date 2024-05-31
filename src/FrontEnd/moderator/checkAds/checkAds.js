@@ -59,34 +59,20 @@ $(document).ready(function() {
     adContainer.appendChild(detailsContainer);
   
     // Добавляем кнопки "Подтвердить" и "Отклонить"
-    const buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('buttons-container');
+   
 
-    const acceptButton = document.createElement('button');
-    acceptButton.textContent = 'Подтвердить';
-    acceptButton.classList.add('accept-button');
-    acceptButton.onclick = () => updateModerationStatus(adId, 'Accepted');
-
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Отклонить';
-    cancelButton.classList.add('cancel-button');
-    cancelButton.onclick = () => updateModerationStatus(adId, 'Canceled');
-
-    buttonsContainer.appendChild(acceptButton);
-    buttonsContainer.appendChild(cancelButton);
-    adContainer.appendChild(buttonsContainer);
 
     return adContainer;
 }
 
- // Функция для обновления статуса модерации
- function updateModerationStatus(adId, status) {
-  fetch(`/updateAdStatus?id=${adId}`, {
+// Функция для обновления статуса модерации
+function updateModerationStatus(adId, status) {
+  fetch('/updateAdStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ moderationStatus: status })
+    body: JSON.stringify({ id: adId, moderationStatus: status })
   })
   .then(response => {
     if (!response.ok) {
@@ -96,7 +82,8 @@ $(document).ready(function() {
   })
   .then(data => {
     console.log('Status updated:', data);
-    loadAdDetail(); // Обновляем детали объявления после изменения статуса
+    // loadAdDetail(); // Обновляем детали объявления после изменения статуса
+    window.location.href = '../moderationAds/moderationAds.html';
   })
   .catch(error => {
     console.error('Ошибка:', error);
@@ -128,6 +115,22 @@ $(document).ready(function() {
               textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
               container.appendChild(textMessage);
           });
+
+          const buttonsContainer = document.getElementById('buttons-container');
+      
+          const acceptButton = document.createElement('button');
+          acceptButton.textContent = 'Подтвердить';
+          acceptButton.classList.add('accept-button');
+          acceptButton.onclick = () => updateModerationStatus(adId, 'Accepted');
+      
+          const cancelButton = document.createElement('button');
+          cancelButton.textContent = 'Отклонить';
+          cancelButton.classList.add('cancel-button');
+          cancelButton.onclick = () => updateModerationStatus(adId, 'Canceled');
+          
+          buttonsContainer.append(acceptButton);
+          buttonsContainer.append(cancelButton);
+
   }
 
   // Изначальная загрузка деталей объявления

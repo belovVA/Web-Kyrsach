@@ -93,8 +93,8 @@ main {
 
 .buttons-container {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
+  justify-content: space-between; /* Ставим кнопки на одну линию */
+  gap: 10px; /* Расстояние между кнопками */
   margin-top: 20px;
 }
 

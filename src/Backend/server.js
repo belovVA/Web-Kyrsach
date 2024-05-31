@@ -407,6 +407,24 @@ app.get('/adsModeration', async (req, res) => {
   }
 });
 
+// Маршрут для обновления статуса модерации объявления
+app.post('/updateAdStatus', async (req, res) => {
+  const { id, moderationStatus } = req.body;
+  if (!id || !moderationStatus) {
+      return res.status(400).send('Invalid request');
+  }
+
+  try {
+      const ad = await Announcement.findByIdAndUpdate(id, { moderationStatus }, { new: true });
+      if (!ad) {
+          return res.status(404).send('Announcement not found');
+      }
+      res.json(ad);
+  } catch (error) {
+      console.error('Ошибка при обновлении статуса объявления:', error);
+      res.status(500).send('Ошибка при обновлении статуса объявления');
+  }
+});
 
 
 app.listen(PORT, () => {

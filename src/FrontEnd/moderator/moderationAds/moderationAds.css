@@ -39,7 +39,7 @@ header {
 
 #adsContainer {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -48,7 +48,7 @@ header {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: calc(33.333% - 20px);
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -80,7 +80,7 @@ header {
   margin-bottom: 10px;
 }
 
-#backButton{
+#backButton {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #3a699b;
