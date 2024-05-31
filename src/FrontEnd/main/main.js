@@ -16,10 +16,10 @@ $(document).ready(function() {
           .then(user => {
               console.log('Получен профиль пользователя:', user);
               // Проверяем роль пользователя
-              if (user.role === 'admin') {
+              
+              if (user.role === 'admin' || user.role === 'superadmin') {
                   $('#profileLink').show();
                   $('#myAdsLink').show();
-                  $('#settingsLink').show();
                   $('#logoutLink').show();
                   $('#loginRegisterLink').hide();
                   // Показываем элементы для администратора
@@ -27,7 +27,6 @@ $(document).ready(function() {
               } else if (user.role === 'moderator') {
                   $('#profileLink').show();
                   $('#myAdsLink').show();
-                  $('#settingsLink').show();
                   $('#logoutLink').show();
                   $('#loginRegisterLink').hide();
                   // Показываем элементы для модератора
@@ -35,7 +34,6 @@ $(document).ready(function() {
               } else {
                   $('#profileLink').show();
                   $('#myAdsLink').show();
-                  $('#settingsLink').show();
                   $('#logoutLink').show();
                   $('#loginRegisterLink').hide();
               }

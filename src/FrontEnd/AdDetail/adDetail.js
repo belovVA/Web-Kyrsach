@@ -3,7 +3,7 @@ $(document).ready(function() {
   const adId = urlParams.get('adId');
 
   $('#backButton').click(function() {
-    window.location.href = '../myAds/myAds.html';
+    window.location.href = '../main/main.html';
 });
 
   // Функция для загрузки деталей объявления с сервера

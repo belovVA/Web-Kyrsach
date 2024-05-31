@@ -45,7 +45,7 @@ $(document).ready(function() {
           data: JSON.stringify(loginData),
           contentType: 'application/json',
           success: function(response) {
-              alert('Вход успешен!');
+              // alert('Вход успешен!');
               localStorage.setItem('userId', response.userId);
               // Перенаправление на страницу main.html
               window.location.href = '../main/main.html';
