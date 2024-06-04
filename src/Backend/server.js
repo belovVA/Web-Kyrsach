@@ -77,25 +77,24 @@ app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
   }
   
   const photoUrl = req.file.filename; // Имя файла без пути
-  res.json({ photoUrl: photoUrl });
+  res.json({ photoUrl });
 });
 
 
 
 
 app.post('/createAd', async (req, res) => {
-  const { title, photoUrl, description, date, location, userId } = req.body;
+  const { titll, description, date, location, userId } = req.body;
 
   try {
-      // Извлекаем имя файла из URL изображения
+      // Извлекйла из URL изображения
       let photoFileName = '';
-      if (photoUrl !== undefined){
-          photoFileName = photoUrl.split('/').pop();
+      if (photodefined){
+          phot= photoUrl.split('/').pop();
       } 
 
       const announcement = new Announcement({
-          title,
-          photoUrl: photoFileName, // Сохраняем только имя файла
+              photoFileName, // Сохраняем только имя файла
           description,
           date,
           location,
