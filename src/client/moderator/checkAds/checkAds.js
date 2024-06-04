@@ -3,7 +3,7 @@ $(document).ready(function() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const adId = urlParams.get('adId');
-  console.log("Ad ID:", adId);
+  // console.log("Ad ID:", adId);
 
   $('#backButton').click(function() {
     window.location.href = '../moderationAds/moderationAds.html?';
@@ -81,7 +81,7 @@ function updateModerationStatus(adId, status) {
     return response.json();
   })
   .then(data => {
-    console.log('Status updated:', data);
+    // console.log('Status updated:', data);
     // loadAdDetail(); // Обновляем детали объявления после изменения статуса
     window.location.href = '../moderationAds/moderationAds.html';
   })
@@ -94,7 +94,7 @@ function updateModerationStatus(adId, status) {
   function loadAdDetail() {
       const container = document.getElementById('adDetailContainer');
       container.innerHTML = ''; // Очищаем контейнер перед добавлением новых данных
-      console.log("Попытка загрузить детали объявления");
+      // console.log("Попытка загрузить детали объявления");
 
       fetch(`/adDetail?id=${adId}`)
           .then(response => {
@@ -104,7 +104,7 @@ function updateModerationStatus(adId, status) {
               return response.json();
           })
           .then(data => {
-              console.log('Fetched ad detail:', data); // Вывод данных в консоль
+              // console.log('Fetched ad detail:', data); // Вывод данных в консоль
               container.innerHTML = ''; // Очищаем контейнер перед добавлением новых данных
               container.appendChild(getAdDetailHTML(data));
           })

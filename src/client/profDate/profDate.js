@@ -1,8 +1,11 @@
 $(document).ready(function() {
-  const owner = localStorage.getItem('userId');
+  // console.log("yes");
+  let owner = localStorage.getItem('userId');
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('userId');
-
+  // owner = userId;
+// console.log(owner);
+// console.log(userId);
   if (!userId) {
       window.location.href = '../LoginOrRegistration/logreg.html';
   }
@@ -13,7 +16,10 @@ $(document).ready(function() {
     $.get('/profile/' + owner, function(ownerData) {
         $.get('/profile/' + userId, function(userData) {
             if (owner !== userId) {
-                if (ownerData.role === 'admin' && userData.role === 'admin') {
+              console.log(owner.role);
+              console.log(userData.role);
+
+                if (ownerData.role === 'admin' && (userData.role === 'admin' || userData.role === 'superadmin')) {
                     $('#editButton').hide();
                     $('#editPasswordButton').hide();
                     $('#deleteButton').hide();

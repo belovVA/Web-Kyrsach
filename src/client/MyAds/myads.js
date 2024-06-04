@@ -5,14 +5,14 @@ $(document).ready(function() {
   const userId = localStorage.getItem('userId');
 
   if (userId) {
-      console.log('Пользователь с ID ' + userId + ' вошел в систему.');
+      // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
       $('#profileLink').show();
       $('#myAdsLink').show();
       $('#settingsLink').show();
       $('#logoutLink').show();
       $('#loginRegisterLink').hide();
   } else {
-      console.log('Пользователь не вошел в систему.');
+      // console.log('Пользователь не вошел в систему.');
   }
 
   function getAdHTML(ad) {
@@ -57,7 +57,7 @@ $(document).ready(function() {
   function loadAds(sortByDate = false, filterStatus = null, daysRange = 365) {
       const container = document.getElementById('adContainer');
       container.innerHTML = '';
-      console.log("Попытка загрузить объявления");
+      // console.log("Попытка загрузить объявления");
 
       fetch(`/user-ads?userId=${userId}&sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
           .then(response => {
@@ -67,7 +67,7 @@ $(document).ready(function() {
               return response.json();
           })
           .then(data => {
-              console.log('Fetched ads:', data);
+              // console.log('Fetched ads:', data);
               container.innerHTML = '';
 
               // Отображение объявлений, сгруппированных по moderationStatus

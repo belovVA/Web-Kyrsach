@@ -3,8 +3,8 @@ $(document).ready(function() {
   const userId = localStorage.getItem('userId');
 
   if (userId) {
-    $('#profileLink').attr('href', `../profile/profile.html?userId=${userId}`).show();
-      console.log('Пользователь с ID ' + userId + ' вошел в систему.');
+    $('#profileLink').attr('href', `../profDate/profDate.html?userId=${userId}`).show();
+      // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
       // Получаем информацию о пользователе с сервера
       fetch(`/profile/${userId}`)
           .then(response => {
@@ -14,7 +14,7 @@ $(document).ready(function() {
               return response.json();
           })
           .then(user => {
-              console.log('Получен профиль пользователя:', user);
+              // console.log('Получен профиль пользователя:', user);
               // Проверяем роль пользователя
               
               if (user.role === 'admin' || user.role === 'superadmin') {
@@ -43,7 +43,7 @@ $(document).ready(function() {
               $('#loginRegisterLink').show();
           });
   } else {
-      console.log('Пользователь не вошел в систему.');
+      // console.log('Пользователь не вошел в систему.');
   }
 
   function getAdHTML(ad) {
@@ -93,7 +93,7 @@ $(document).ready(function() {
   function loadAds(sortByDate = false, filterStatus = null, daysRange = 365) {
       const container = document.getElementById('adContainer');
       container.innerHTML = '';
-      console.log("Попытка загрузить объявления");
+      // console.log("Попытка загрузить объявления");
 
       fetch(`/ads?sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
           .then(response => {
@@ -103,7 +103,7 @@ $(document).ready(function() {
               return response.json();
           })
           .then(data => {
-              console.log('Fetched ads:', data);
+              // console.log('Fetched ads:', data);
               container.innerHTML = '';
               data.forEach(ad => {
                   container.appendChild(getAdHTML(ad));

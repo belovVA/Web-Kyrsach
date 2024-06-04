@@ -3,8 +3,8 @@
   const userId = localStorage.getItem('userId');
 
   if (userId) {
-    $('#profileLink').attr('href', `../profile/profile.html?userId=${userId}`).show();
-      // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
+    $('#profileLink').attr('href', `../profDate/profDate.html?userId=${userId}`).show();
+      // // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
       // Получаем информацию о пользователе с сервера
       fetch(`/profile/${userId}`)
           .then(response => {
@@ -14,7 +14,7 @@
               return response.json();
           })
           .then(user => {
-              console.log('Получен профиль пользователя:', user);
+              // console.log('Получен профиль пользователя:', user);
               // Проверяем роль пользователя
               var roleSelect = $('#role');
         roleSelect.empty(); // Очищаем существующие опции

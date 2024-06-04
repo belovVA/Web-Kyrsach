@@ -1,13 +1,12 @@
 $(document).ready(function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get('userId');
-
+  const userId = localStorage.getItem('userId');
+  // console.log("Ваш " + userId);
   if (userId) {
-      console.log('Пользователь с ID ' + userId + ' вошел в систему.');
+      // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
       $('#addUserButton').show();
       $('#logoutLink').show();
   } else {
-      console.log('Пользователь не вошел в систему.');
+      // console.log('Пользователь не вошел в систему.');
   }
 
   // Функция для получения HTML-кода пользователя
@@ -26,7 +25,7 @@ $(document).ready(function() {
 
       userContainer.addEventListener('click', () => {
           const userId = userContainer.getAttribute('data-id');
-          window.location.href = `../../Profile/profile.html?userId=${userId}`;
+          window.location.href = `../../profDate/profDate.html?userId=${userId}`;
       });
 
       return userContainer;
@@ -38,7 +37,7 @@ $(document).ready(function() {
       container.innerHTML = '';
 
       let url = '/users';
-      console.log(role);
+      // console.log(role);
       if (role) {
           url = `/usersByRole?role=${role}`;
       }
@@ -51,7 +50,7 @@ $(document).ready(function() {
               return response.json();
           })
           .then(data => {
-              console.log('Fetched users:', data);
+              // console.log('Fetched users:', data);
               container.innerHTML = '';
               data.forEach(user => {
                   container.appendChild(getUserHTML(user));

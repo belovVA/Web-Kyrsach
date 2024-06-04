@@ -2,7 +2,7 @@ $(document).ready(function() {
   const userId = localStorage.getItem('userId');
 // Передача статуса модерации при загрузке объявлений
 function loadAds(moderationStatus) {
-  console.log(moderationStatus);
+  // console.log(moderationStatus);
   $.get('/adsModeration', { moderationStatus: moderationStatus }, function(ads) {
       $('#adsContainer').empty();
       ads.forEach(ad => {
