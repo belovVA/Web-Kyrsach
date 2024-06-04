@@ -66,7 +66,9 @@ $(document).ready(function() {
               input = $('<input type="date">').val(span.text()).insertAfter(span);
           } else if (id === 'adDescription') {
               input = $('<textarea>').val(span.text()).insertAfter(span);
-          } else {
+          } else if (id === 'adStatus') {
+            input = $('<select><option value="Найден">Найден</option><option value="Не найден">Не найден</option></select>').val(span.text()).insertAfter(span);
+          }else{
               input = $('<input>').val(span.text()).insertAfter(span);
           }
           span.hide();

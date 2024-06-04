@@ -77,7 +77,7 @@ $(document).ready(function() {
       infoContainer.appendChild(location);
 
       const status = document.createElement('p');
-      status.textContent = `Статус: ${ad.status ? 'Найден' : 'Не найден'}`;
+      status.textContent = `Владелец: ${ad.status ? 'Найден' : 'Не найден'}`;
       infoContainer.appendChild(status);
 
       adContainer.appendChild(infoContainer);
