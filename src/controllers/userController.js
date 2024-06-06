@@ -120,11 +120,33 @@ const userNewCreate =  async (req, res) => {
 };
 
 // Получение списка пользователей
-const usersList =  async (req, res) => {
+const usersList = async (req, res) => {
+  const { searchQuery, role } = req.query;
+
   try {
-      const users = await User.find();
+      let users;
+      const filter = {}; // Инициализируем пустой фильтр
+      if (searchQuery) {
+          // Поиск по различным полям схемы
+          filter.$or = [
+                  { lastName: { $regex: searchQuery, $options: 'i' } },
+                  { firstName: { $regex: searchQuery, $options: 'i' } },
+                  { middleName: { $regex: searchQuery, $options: 'i' } },
+                  { phone: { $regex: searchQuery, $options: 'i' } },
+                  
+                  // Другие поля, если необходимо добавить их в поиск
+              ];
+          
+      } 
+      if (role && role !== '') {
+        filter.role = role; // Добавляем значение роли в фильтр, если оно передано
+      }
+  
+      // Используем фильтр при поиске пользователей
+      users = await User.find(filter);
       res.json(users);
   } catch (error) {
+      console.error('Ошибка при получении списка пользователей:', error);
       res.status(500).send('Ошибка при получении списка пользователей');
   }
 };

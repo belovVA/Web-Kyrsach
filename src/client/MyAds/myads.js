@@ -1,19 +1,9 @@
 $(document).ready(function() {
+  const userId = localStorage.getItem('userId');
+
   $('#backButton').click(function() {
       window.location.href = '../main/main.html?userId=' + userId;
   });
-  const userId = localStorage.getItem('userId');
-
-  if (userId) {
-      // console.log('Пользователь с ID ' + userId + ' вошел в систему.');
-      $('#profileLink').show();
-      $('#myAdsLink').show();
-      $('#settingsLink').show();
-      $('#logoutLink').show();
-      $('#loginRegisterLink').hide();
-  } else {
-      // console.log('Пользователь не вошел в систему.');
-  }
 
   function getAdHTML(ad) {
       const adContainer = document.createElement('div');
@@ -21,7 +11,7 @@ $(document).ready(function() {
       adContainer.setAttribute('data-id', ad._id);
 
       const image = document.createElement('img');
-      image.src = ad.photoUrl ?  '../uploads/' + ad.photoUrl : '../uploads/no-image-thumb.jpg';
+      image.src = ad.photoUrl ? '../uploads/' + ad.photoUrl : '../uploads/no-image-thumb.jpg';
       image.alt = ad.title;
       adContainer.appendChild(image);
 
@@ -54,12 +44,11 @@ $(document).ready(function() {
       return adContainer;
   }
 
-  function loadAds(sortByDate = false, filterStatus = null, daysRange = 365) {
+  function loadAds(sortByDate = false, filterStatus = null, searchQuery = '', daysRange = 365) {
       const container = document.getElementById('adContainer');
       container.innerHTML = '';
-      // console.log("Попытка загрузить объявления");
 
-      fetch(`/user-ads?userId=${userId}&sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
+      fetch(`/user-ads?userId=${userId}&sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}&searchQuery=${searchQuery}`)
           .then(response => {
               if (!response.ok) {
                   throw new Error('Ошибка при загрузке данных');
@@ -67,10 +56,8 @@ $(document).ready(function() {
               return response.json();
           })
           .then(data => {
-              // console.log('Fetched ads:', data);
               container.innerHTML = '';
 
-              // Отображение объявлений, сгруппированных по moderationStatus
               for (const status in data) {
                   const statusContainer = document.createElement('div');
                   statusContainer.classList.add('status-group');
@@ -95,7 +82,13 @@ $(document).ready(function() {
           });
   }
 
+  $('#searchButton').click(function() {
+      const searchQuery = $('#searchInput').val();
+      loadAds(false, null, searchQuery);
+  });
+
   $('#resetButton').click(function() {
+      $('#searchInput').val('');
       loadAds();
   });
 
@@ -112,11 +105,11 @@ $(document).ready(function() {
   });
 
   $('#last7DaysButton').click(function() {
-      loadAds(false, null, 7);
+      loadAds(false, null, '', 7);
   });
 
   $('#lastMonthButton').click(function() {
-      loadAds(false, null, 31);
+      loadAds(false, null, '', 31);
   });
 
   $('#logoutLink').click(function(event) {

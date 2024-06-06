@@ -19,14 +19,17 @@ $(document).ready(function() {
               
               if (user.role === 'admin' || user.role === 'superadmin') {
                   $('#profileLink').show();
-                  $('#myAdsLink').show();
+                  $('#myAdsLink').hide();
+                  $('#AddAdvLink').hide();
                   $('#logoutLink').show();
                   $('#loginRegisterLink').hide();
                   // Показываем элементы для администратора
                   $('#adminControls').show();
               } else if (user.role === 'moderator') {
                   $('#profileLink').show();
-                  $('#myAdsLink').show();
+                  $('#myAdsLink').hide();
+                  $('#AddAdvLink').hide();
+
                   $('#logoutLink').show();
                   $('#loginRegisterLink').hide();
                   // Показываем элементы для модератора
@@ -90,56 +93,69 @@ $(document).ready(function() {
       return adContainer;
   }
 
-  function loadAds(sortByDate = false, filterStatus = null, daysRange = 365) {
-      const container = document.getElementById('adContainer');
-      container.innerHTML = '';
-      // console.log("Попытка загрузить объявления");
+  function loadAds(sortByDate = false, filterStatus = null,  searchQuery = '', daysRange = 365) {
+    const container = document.getElementById('adContainer');
+    container.innerHTML = '';
 
-      fetch(`/ads?sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}`)
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Ошибка при загрузке данных');
-              }
-              return response.json();
-          })
-          .then(data => {
-              // console.log('Fetched ads:', data);
-              container.innerHTML = '';
-              data.forEach(ad => {
-                  container.appendChild(getAdHTML(ad));
-              });
-          })
-          .catch(error => {
-              console.error('Ошибка:', error);
-              container.innerHTML = '';
-              const textMessage = document.createElement('p');
-              textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
-              container.appendChild(textMessage);
-          });
-  }
+    fetch(`/ads?sortByDate=${sortByDate}&filterStatus=${filterStatus}&daysRange=${daysRange}&searchQuery=${searchQuery}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных');
+            }
+            return response.json();
+        })
+        .then(data => {
+            container.innerHTML = '';
+            data.forEach(ad => {
+                container.appendChild(getAdHTML(ad));
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            container.innerHTML = '';
+            const textMessage = document.createElement('p');
+            textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
+            container.appendChild(textMessage);
+        });
+}
+
+$('#searchButton').click(function() {
+    const searchQuery = $('#searchInput').val();
+    loadAds(false, null,searchQuery);
+});
 
   $('#resetButton').click(function() {
       loadAds();
+      $('#searchInput').val('');
   });
 
   $('#allAdsButton').click(function() {
-      loadAds(false, null);
+    const searchQuery = $('#searchInput').val();
+    loadAds(false, null, searchQuery);
   });
 
   $('#ownerNotFoundButton').click(function() {
-      loadAds(false, false);
+    const searchQuery = $('#searchInput').val();
+    loadAds(false, false, searchQuery);
+
   });
 
   $('#ownerFoundButton').click(function() {
-      loadAds(false, true);
+    const searchQuery = $('#searchInput').val();
+
+      loadAds(false, true, searchQuery);
   });
 
   $('#last7DaysButton').click(function() {
-      loadAds(false, null, 7);
+    const searchQuery = $('#searchInput').val();
+
+      loadAds(false, null,searchQuery,  7);
   });
 
   $('#lastMonthButton').click(function() {
-      loadAds(false, null, 31);
+    const searchQuery = $('#searchInput').val();
+
+      loadAds(false, null,searchQuery,  31);
   });
 
   $('#logoutLink').click(function(event) {

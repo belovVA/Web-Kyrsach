@@ -1,3 +1,4 @@
+let selectRole = '';
 $(document).ready(function() {
   const userId = localStorage.getItem('userId');
   // console.log("Ваш " + userId);
@@ -32,57 +33,89 @@ $(document).ready(function() {
   }
 
   // Функция для загрузки пользователей
-  function loadUsers(role) {
+  function loadUsers(searchQuery, role) {
       const container = document.getElementById('userContainer');
       container.innerHTML = '';
 
       let url = '/users';
-      // console.log(role);
+      let query = {};
       if (role) {
-          url = `/usersByRole?role=${role}`;
+          query.role = role;
+      }
+      if (searchQuery) {
+          query.searchQuery = searchQuery;
       }
 
-      fetch(url)
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Ошибка при загрузке данных');
-              }
-              return response.json();
-          })
-          .then(data => {
-              // console.log('Fetched users:', data);
-              container.innerHTML = '';
-              data.forEach(user => {
-                  container.appendChild(getUserHTML(user));
-              });
-          })
-          .catch(error => {
-              console.error('Ошибка:', error);
-              container.innerHTML = '';
-              const textMessage = document.createElement('p');
-              textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
-              container.appendChild(textMessage);
+      $.get(url, query, function(data) {
+          container.innerHTML = '';
+          data.forEach(user => {
+              container.appendChild(getUserHTML(user));
           });
+      }).fail(function(error) {
+          console.error('Ошибка:', error);
+          container.innerHTML = '';
+          const textMessage = document.createElement('p');
+          textMessage.textContent = 'Ошибка при загрузке данных. Пожалуйста, попробуйте еще раз позже.';
+          container.appendChild(textMessage);
+      });
   }
 
-  $('#resetButton').click(function() {
-      loadUsers();
-  });
+
+
+// Внутри document.ready
+$('#searchButton').click(function() {
+    const searchQuery = $('#searchInput').val();
+    loadUsers(searchQuery, selectRole);
+    console.log(searchQuery + ' _ ' + selectRole);
+});
+
+$('#resetButton').click(function() {
+    loadUsers();
+    selectRole = '';
+
+    $('#searchInput').val('');
+
+});
+
+// И другие обработчики событий для кнопок фильтрации ролей
 
   $('#allUsersButton').click(function() {
-      loadUsers();
+      selectRole = '';
+      const searchQuery = $('#searchInput').val();
+    loadUsers(searchQuery, selectRole);
+    console.log(searchQuery + ' _ ' + selectRole);
+
+
+      
   });
 
   $('#userGuestButton').click(function() {
-      loadUsers('user');
+      selectRole = 'user';
+      const searchQuery = $('#searchInput').val();
+    loadUsers(searchQuery, selectRole);
+    console.log(searchQuery + ' _ ' + selectRole);
+
+
   });
 
   $('#staffButton').click(function() {
-      loadUsers('moderator');
+      selectRole = 'moderator';
+      const searchQuery = $('#searchInput').val();
+    loadUsers(searchQuery, selectRole);
+    console.log(searchQuery + ' _ ' + selectRole);
+
+
+
   });
 
   $('#adminButton').click(function() {
-      loadUsers('admin');
+      selectRole = 'admin';
+      const searchQuery = $('#searchInput').val();
+    loadUsers(searchQuery, selectRole);
+    console.log(searchQuery + ' _ ' + selectRole);
+
+
+
   });
 
   $('#logoutLink').click(function(event) {

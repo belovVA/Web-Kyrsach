@@ -1,37 +1,80 @@
+let grValue = 'Watching';
+
 $(document).ready(function() {
   const userId = localStorage.getItem('userId');
-// Передача статуса модерации при загрузке объявлений
-function loadAds(moderationStatus) {
-  // console.log(moderationStatus);
-  $.get('/adsModeration', { moderationStatus: moderationStatus }, function(ads) {
-      $('#adsContainer').empty();
-      ads.forEach(ad => {
-          const adContainer = getAdHTML(ad);
-          $('#adsContainer').append(adContainer);
-      });
-  }).fail(function(error) {
-      alert('Ошибка при загрузке объявлений');
-      console.error('Error fetching ads:', error);
+  function loadAds(moderationStatus, searchQuery) {
+      const filter = {
+          moderationStatus: moderationStatus
+      };
+
+      if (searchQuery) {
+          const searchRegExp = new RegExp(searchQuery, 'i');
+          filter.$or = [
+              { title: searchRegExp },
+              { description: searchRegExp },
+              { location: searchRegExp }
+          ];
+      }
+
+      $.get('/adsModeration', {moderationStatus: moderationStatus, searchQuery: searchQuery}, function(ads) {
+        $('#adsContainer').empty();
+        ads.forEach(ad => {
+            const adContainer = getAdHTML(ad);
+            $('#adsContainer').append(adContainer);
+        });
+    }).fail(function(error) {
+        alert('Ошибка при загрузке объявлений');
+        console.error('Error fetching ads:', error);
+    });
+    
+  }
+
+  // Обработка клика на кнопках фильтрации по статусу модерации
+
+  $('#searchButton').click(function() {
+    const searchQuery = $('#searchInput').val();
+    console.log(grValue + ' '+ searchQuery);
+    loadAds(grValue,searchQuery);
+});
+
+  $('#resetButton').click(function() {
+      loadAds(grValue);
+      $('#searchInput').val('');
+
   });
-}
 
-$('#backButton').click(function() {
-  window.location.href = '../../main/main.html?userId=' + userId;
+  $('#backButton').click(function() {
+    window.location.href = '../../main/main.html?userId=' + userId;
 });
 
+  $('#pendingButton').click(function() {
 
-// Обработка клика на кнопках фильтрации по статусу модерации
-$('#pendingButton').click(function() {
-  loadAds('Watching');
-});
+      grValue = 'Watching';
+      const searchQuery = $('#searchInput').val();
+    console.log(grValue + ' '+ searchQuery);
 
-$('#acceptedButton').click(function() {
-  loadAds('Accepted');
-});
+    loadAds(grValue,searchQuery);
+  });
 
-$('#rejectedButton').click(function() {
-  loadAds('Canceled');
-});
+  $('#acceptedButton').click(function() {
+      grValue = 'Accepted';
+      const searchQuery = $('#searchInput').val();
+    console.log(grValue + ' '+ searchQuery);
+
+    loadAds(grValue,searchQuery);
+
+  });
+
+  $('#rejectedButton').click(function() {
+      grValue = 'Canceled';
+      const searchQuery = $('#searchInput').val();
+    console.log(grValue + ' '+ searchQuery);
+
+    loadAds(grValue,searchQuery);
+
+  });
+
+
 
   function getAdHTML(ad) {
       const adContainer = document.createElement('div');

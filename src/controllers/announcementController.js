@@ -85,7 +85,7 @@ const deleteAd = async (req, res) => {
 };
 
 const getUserAds = async (req, res) => {
-  const { userId, sortByDate, filterStatus, daysRange } = req.query;
+  const { userId, sortByDate, filterStatus, daysRange, searchQuery } = req.query;
   const dateLimit = new Date();
   dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
 
@@ -95,6 +95,14 @@ const getUserAds = async (req, res) => {
       if (filterStatus === 'true' || filterStatus === 'false') {
           filter.status = filterStatus === 'true';
       }
+  }
+
+  if (searchQuery) {
+      filter.$or = [
+          { title: { $regex: searchQuery, $options: 'i' } },
+          { description: { $regex: searchQuery, $options: 'i' } },
+          // Добавьте другие поля для поиска, если необходимо
+      ];
   }
 
   try {
@@ -116,29 +124,46 @@ const getUserAds = async (req, res) => {
 };
 
 const getAds = async (req, res) => {
-  const { sortByDate, filterStatus, daysRange } = req.query;
+  const { sortByDate, filterStatus, daysRange, searchQuery } = req.query;
   const dateLimit = new Date();
   dateLimit.setDate(dateLimit.getDate() - (daysRange || 365));
 
-  let filter = { 
-      date: { $gte: dateLimit },
-      moderationStatus: 'Accepted' 
+  let filter = {
+    date: { $gte: dateLimit },
+    moderationStatus: 'Accepted'
   };
-  
+
   if (filterStatus !== undefined) {
-      if (filterStatus === 'true' || filterStatus === 'false') {
-          filter.status = filterStatus === 'true';
-      }
+    if (filterStatus === 'true' || filterStatus === 'false') {
+      filter.status = filterStatus === 'true';
+    }
+  }
+
+  if (searchQuery) {
+    // Convert searchQuery to a date object
+    const searchDate = new Date(searchQuery);
+    if (!isNaN(searchDate)) {
+      // Filter by exact date
+      filter.date = searchDate;
+    } else {
+      // If searchQuery is not a valid date, perform other searches
+      filter.$or = [
+        { title: new RegExp(searchQuery, 'i') },
+        { description: new RegExp(searchQuery, 'i') },
+        { location: new RegExp(searchQuery, 'i') },
+      ];
+    }
   }
 
   try {
-      const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
-      res.json(ads);
+    const ads = await Announcement.find(filter).sort(sortByDate ? { date: -1 } : {});
+    res.json(ads);
   } catch (error) {
-      console.error('Ошибка при получении объявлений:', error);
-      res.status(500).send('Ошибка при получении объявлений');
+    console.error('Ошибка при получении объявлений:', error);
+    res.status(500).send('Ошибка при получении объявлений');
   }
 };
+
 
 const updateAdStatus = async (req, res) => {
   const { id, moderationStatus } = req.body;
@@ -158,12 +183,29 @@ const updateAdStatus = async (req, res) => {
   }
 };
 
+
 const getAdsModeration = async (req, res) => {
-  const { moderationStatus } = req.query;
+  const { moderationStatus, searchQuery } = req.query;
   
   const filter = {};
+  
   if (moderationStatus) {
       filter.moderationStatus = moderationStatus;
+  }
+
+  if (searchQuery) {
+    const searchDate = new Date(searchQuery);
+    if (!isNaN(searchDate)) {
+      // Filter by exact date
+      filter.date = searchDate;
+    } else {
+      // If searchQuery is not a valid date, perform other searches
+      filter.$or = [
+        { title: new RegExp(searchQuery, 'i') },
+        { description: new RegExp(searchQuery, 'i') },
+        { location: new RegExp(searchQuery, 'i') },
+      ];
+    }
   }
 
   try {
@@ -173,6 +215,10 @@ const getAdsModeration = async (req, res) => {
       console.error('Ошибка при получении объявлений:', error);
       res.status(500).send('Ошибка при получении объявлений');
   }
+};
+
+module.exports = {
+  getAdsModeration
 };
 
 module.exports = {
