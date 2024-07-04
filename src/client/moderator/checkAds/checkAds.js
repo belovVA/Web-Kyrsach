@@ -41,19 +41,12 @@ $(document).ready(function() {
     const status = document.createElement('p');
     status.textContent = `Статус: ${ad.status ? 'Найден' : 'Не найден'}`;
   
-    const name = document.createElement('p');
-    name.textContent = `Имя нашедшего: ${ad.name}`;
-  
-    const phone = document.createElement('p');
-    phone.textContent = `Телефон: ${ad.phone}`;
   
     detailsContainer.appendChild(title);
     detailsContainer.appendChild(description);
     detailsContainer.appendChild(date);
     detailsContainer.appendChild(location);
     detailsContainer.appendChild(status);
-    detailsContainer.appendChild(name);
-    detailsContainer.appendChild(phone);
   
     adContainer.appendChild(imageContainer);
     adContainer.appendChild(detailsContainer);

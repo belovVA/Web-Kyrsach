@@ -1,0 +1,89 @@
+[{
+  "_id": {
+    "$oid": "665f4445633bb4e777c86b15"
+  },
+  "title": "Потеря ключей",
+  "description": "Потерял ключи 27.04.2024. К сожалению фото не имею. Синий брелок с флагом финляндии, 2 ключа. Потерял у входа в 7 Здание КАИ ",
+  "date": {
+    "$date": "2024-04-27T00:00:00.000Z"
+  },
+  "location": "Ул. Большая Красная 55, время примерно 14:00",
+  "userId": {
+    "$oid": "665f43be633bb4e777c86b0e"
+  },
+  "status": false,
+  "moderationStatus": "Canceled",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f572a633bb4e777c86b1d"
+  },
+  "title": "Потерял шапку",
+  "photoUrl": "1717524266508.jpg",
+  "description": "Данная шапка была потеряна 1го мая на площади Победы",
+  "date": {
+    "$date": "2024-05-10T00:00:00.000Z"
+  },
+  "location": "Площадь Победы, 1го мая",
+  "userId": {
+    "$oid": "665f43be633bb4e777c86b0e"
+  },
+  "status": false,
+  "moderationStatus": "Accepted",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f7e8671aafbba335580b7"
+  },
+  "title": "Найден кошелек",
+  "photoUrl": "1717534342561.jpg",
+  "description": "Найден черный кошелек в парке Победы",
+  "date": {
+    "$date": "2024-06-03T00:00:00.000Z"
+  },
+  "location": "Парк Победы, 13:30",
+  "userId": {
+    "$oid": "665f7de071aafbba335580ac"
+  },
+  "status": false,
+  "moderationStatus": "Accepted",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f7ec671aafbba335580c4"
+  },
+  "title": "Найдены ключи",
+  "photoUrl": "1717534406333.jpg",
+  "description": "Найдены ключи во дворе на улице Серова между 8 и 10 домом",
+  "date": {
+    "$date": "2024-06-03T00:00:00.000Z"
+  },
+  "location": "Двор ул. Серова , 13:30",
+  "userId": {
+    "$oid": "665f7de071aafbba335580ac"
+  },
+  "status": false,
+  "moderationStatus": "Accepted",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66606ee834cb4e738100f729"
+  },
+  "title": "kgh",
+  "photoUrl": "1717595880196.jpg",
+  "description": "jhfhj",
+  "date": {
+    "$date": "2024-06-05T00:00:00.000Z"
+  },
+  "location": "klhkh",
+  "userId": {
+    "$oid": "665f43be633bb4e777c86b0e"
+  },
+  "status": false,
+  "moderationStatus": "Watching",
+  "__v": 0
+}]

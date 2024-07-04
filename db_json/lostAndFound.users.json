@@ -1,0 +1,84 @@
+[{
+  "_id": {
+    "$oid": "6653f03750939ff6e7eda7ac"
+  },
+  "lastName": "Super",
+  "firstName": "admin",
+  "middleName": "TOP",
+  "phone": "superadmin",
+  "birthday": {
+    "$date": "2000-01-01T00:00:00.000Z"
+  },
+  "password": "$2a$10$TW25zK7G1DmpZ1XhBP4Z7eiOlrW/JlAyA3J1XMg1eU/aZ9Dm9s00W",
+  "role": "superadmin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665442fc00f053d02a06ade0"
+  },
+  "lastName": "moder",
+  "firstName": "moder",
+  "middleName": "moder",
+  "phone": "moder",
+  "password": "$2a$10$KdYJIFJc2r.g/KKGv2LyQuXgsMc1FoScCpDWvnkS7QcBMO5n1GEVe",
+  "role": "moderator",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665967a249e67d3ff591d783"
+  },
+  "lastName": "admin",
+  "firstName": "admin",
+  "middleName": "admin",
+  "phone": "admin",
+  "password": "$2a$10$s44yLdvx1chSXtyIfytIr.0nhDHMCO7VFZg/ukbA1PZepJJTTGA0i",
+  "role": "admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f43be633bb4e777c86b0e"
+  },
+  "lastName": "Белов",
+  "firstName": "Владимир",
+  "middleName": "Алексеевич",
+  "phone": "79270323193",
+  "birthday": {
+    "$date": "2003-11-07T00:00:00.000Z"
+  },
+  "password": "$2a$10$GDr/SRFI/KEBTwydF90YGe6J1pJoZNov0RE398td0AXRCdlX9JTpe",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f7de071aafbba335580ac"
+  },
+  "lastName": "Ивановвввввввввввввввв",
+  "firstName": "Иван",
+  "middleName": "Иванович",
+  "phone": "77777777777",
+  "birthday": {
+    "$date": "2001-01-01T00:00:00.000Z"
+  },
+  "password": "$2a$10$cRXB4B2ktN8qKgInofcz0OIzMfDD1uOd/Vjf/yV9JKu/65RMZVA0S",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665f851b71aafbba33558153"
+  },
+  "lastName": "Федотов",
+  "firstName": "Федот",
+  "middleName": "Федотович",
+  "phone": "33",
+  "birthday": {
+    "$date": "1999-09-19T00:00:00.000Z"
+  },
+  "password": "$2a$10$nKFCd9gHnZoAhkdHzbxJme5BRRneleb1z/DifGN0PwnZRR6OczSmS",
+  "role": "user",
+  "__v": 0
+}]

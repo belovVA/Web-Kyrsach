@@ -128,7 +128,11 @@ $('#searchButton').click(function() {
       loadAds();
       $('#searchInput').val('');
   });
-
+  
+  $('#resetButtonDate').click(function() {
+    const searchQuery = $('#searchInput').val();
+    loadAds(false, null, searchQuery);
+});
   $('#allAdsButton').click(function() {
     const searchQuery = $('#searchInput').val();
     loadAds(false, null, searchQuery);
